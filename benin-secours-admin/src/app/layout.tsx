@@ -6,6 +6,8 @@ export const metadata: Metadata = {
   description: "Dashboard administrateur BENIN SECOURS",
 };
 
+import { SidebarProvider } from "@/lib/SidebarContext";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -13,7 +15,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="fr">
-      <body className="bg-gray-50 text-gray-900 antialiased">{children}</body>
+      <body className="bg-gray-50 text-gray-900 antialiased">
+        <SidebarProvider>{children}</SidebarProvider>
+      </body>
     </html>
   );
 }

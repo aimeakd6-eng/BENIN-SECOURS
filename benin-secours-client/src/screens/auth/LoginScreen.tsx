@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Eye, EyeOff, Shield } from "lucide-react";
+import { ArrowLeft, Eye, EyeOff, Wrench, Hammer, X } from "lucide-react";
 import { signIn } from "@/services/auth_service";
 import { useAuth } from "@/context/AuthContext";
 
@@ -35,49 +35,52 @@ export default function LoginScreen() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col" style={{ backgroundColor: "var(--color-bg)" }}>
-      <header className="flex items-center gap-3 px-4 py-4" style={{ backgroundColor: "var(--color-primary)" }}>
-        <button
-          onClick={() => navigate("/")}
-          className="rounded-full p-1.5 text-white/80 transition-all active:bg-white/20"
-        >
-          <ArrowLeft className="h-5 w-5" />
+    <div className="flex min-h-screen flex-col bg-[#0F0F0E] text-white">
+      <header className="flex items-center justify-between px-6 py-6">
+        <button onClick={() => navigate("/")} className="text-zinc-400">
+          <ArrowLeft className="h-6 w-6" />
         </button>
-        <h1 className="text-lg font-bold text-white">Connexion</h1>
+        <h1 className="text-xl font-black uppercase tracking-[0.2em]">ROAD<span className="text-[#FFFF00]">ASSIST</span></h1>
+        <button onClick={() => navigate("/")} className="text-zinc-400">
+          <X className="h-6 w-6" />
+        </button>
       </header>
 
-      <main className="flex-1 px-5 py-6">
-        <div className="mb-6 flex flex-col items-center">
-          <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white shadow-sm">
-            <Shield className="h-8 w-8" style={{ color: "var(--color-primary)" }} />
+      <main className="flex-1 px-8 py-4">
+        <div className="mb-10 flex flex-col items-center">
+          <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-[#FFFF00] shadow-xl shadow-[#FFFF00]/10">
+            <div className="relative">
+                <Wrench className="h-8 w-8 text-black" />
+                <Hammer className="absolute -bottom-1 -right-1 h-4 w-4 text-black" />
+            </div>
           </div>
-          <h2 className="mt-3 text-xl font-bold text-gray-900">Bienvenue</h2>
-          <p className="mt-1 text-sm text-gray-500">Connectez-vous à votre compte</p>
+          <h2 className="mt-8 text-4xl font-black tracking-tight">Bienvenue</h2>
+          <p className="mt-2 text-zinc-500 font-medium tracking-wide uppercase text-[10px]">Identifiez-vous pour continuer</p>
         </div>
 
         {error && (
-          <div className="mb-4 rounded-xl bg-red-50 p-3 text-sm text-red-700">
+          <div className="mb-6 rounded-xl border border-red-900/50 bg-red-900/10 p-4 text-xs font-bold uppercase tracking-widest text-red-500">
             {error}
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-4">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-gray-700">
-              Email
+            <label className="mb-2 block text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">
+              Adresse e-mail
             </label>
             <input
               type="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm outline-none transition-all focus:border-[#4A90E2] focus:ring-2 focus:ring-[#4A90E2]/20"
-              placeholder="votre@email.com"
+              className="w-full rounded-2xl border border-zinc-800 bg-[#1C1C1A] px-5 py-4 text-sm font-medium outline-none transition-all focus:border-[#FFFF00] focus:ring-1 focus:ring-[#FFFF00]"
+              placeholder="nom@exemple.com"
             />
           </div>
 
           <div>
-            <label className="mb-1.5 block text-sm font-medium text-gray-700">
+            <label className="mb-2 block text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">
               Mot de passe
             </label>
             <div className="relative">
@@ -86,15 +89,15 @@ export default function LoginScreen() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 pr-10 text-sm outline-none transition-all focus:border-[#4A90E2] focus:ring-2 focus:ring-[#4A90E2]/20"
-                placeholder="••••••••"
+                className="w-full rounded-2xl border border-zinc-800 bg-[#1C1C1A] px-5 py-4 text-sm font-medium outline-none transition-all focus:border-[#FFFF00] focus:ring-1 focus:ring-[#FFFF00]"
+                placeholder="Entrez votre mot de passe"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-600"
               >
-                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+                {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
               </button>
             </div>
           </div>
@@ -102,19 +105,23 @@ export default function LoginScreen() {
           <button
             type="submit"
             disabled={loading}
-            className="mt-2 w-full rounded-xl py-3.5 text-sm font-bold text-white transition-all active:opacity-90 disabled:opacity-50"
-            style={{ backgroundColor: "var(--color-primary)" }}
+            className="mt-4 w-full rounded-2xl bg-[#FFFF00] py-4 text-sm font-black uppercase tracking-[0.2em] text-black shadow-xl shadow-[#FFFF00]/10 transition-all active:scale-[0.98] disabled:opacity-50"
           >
             {loading ? "Connexion..." : "Se connecter"}
           </button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-gray-500">
-          Pas encore de compte ?{" "}
-          <button onClick={() => navigate("/register")} className="font-semibold" style={{ color: "var(--color-primary)" }}>
-            S&apos;inscrire
-          </button>
-        </p>
+        <div className="mt-10 flex flex-col items-center gap-4">
+            <p className="text-[10px] font-black uppercase tracking-[0.1em] text-zinc-600">
+                Pas de compte ?{" "}
+                <button onClick={() => navigate("/register")} className="text-[#FFFF00]">
+                    S&apos;inscrire
+                </button>
+            </p>
+
+            <div className="mt-10 h-1 w-12 rounded-full bg-zinc-800"></div>
+            <p className="text-[8px] font-black uppercase tracking-[0.5em] text-zinc-800">Bénin Secours © 2024</p>
+        </div>
       </main>
     </div>
   );

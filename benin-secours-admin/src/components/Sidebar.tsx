@@ -17,6 +17,7 @@ import {
   ChevronRight,
   Shield,
 } from "lucide-react";
+import { useSidebar } from "@/lib/SidebarContext";
 import { supabase } from "@/lib/supabase";
 
 const menuItems = [
@@ -32,7 +33,7 @@ const menuItems = [
 
 export default function Sidebar() {
   const pathname = usePathname();
-  const [collapsed, setCollapsed] = useState(false);
+  const { collapsed, setCollapsed } = useSidebar();
 
   const handleLogout = async () => {
     await supabase.auth.signOut();

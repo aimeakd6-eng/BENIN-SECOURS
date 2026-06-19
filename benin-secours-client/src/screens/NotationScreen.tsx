@@ -83,17 +83,30 @@ export default function NotationScreen() {
 
   if (submitted) {
     return (
-      <div className="flex h-screen flex-col items-center justify-center px-6" style={{ backgroundColor: "var(--color-bg)" }}>
-        <div className="flex flex-col items-center">
-          <div className="flex h-20 w-20 items-center justify-center rounded-full bg-emerald-50">
-            <CheckCircle2 className="h-10 w-10 text-emerald-500" />
+      <div className="flex h-screen flex-col items-center justify-center bg-[#0F0F0E] px-6 text-center">
+        <div className="flex flex-col items-center animate-fade-in">
+          <div className="flex h-28 w-28 items-center justify-center rounded-full bg-[#FFFF00] shadow-[0_0_40px_rgba(255,255,0,0.3)]">
+            <CheckCircle2 className="h-14 w-14 text-black" strokeWidth={3} />
           </div>
-          <h2 className="mt-4 text-xl font-bold text-gray-900">Merci pour votre avis !</h2>
-          <p className="mt-2 text-center text-sm text-gray-500">Votre évaluation a été enregistrée et aidera les autres utilisateurs.</p>
+          <h2 className="mt-8 text-3xl font-black text-white">Merci pour votre avis !</h2>
+          <p className="mt-4 text-sm font-bold uppercase tracking-widest text-zinc-500">
+            Votre évaluation a été enregistrée
+          </p>
+
+          <div className="mt-10 w-full rounded-3xl bg-[#1C1C1A] p-6 border border-[#2D2D2A]">
+             <div className="flex items-center justify-between py-2">
+                <span className="text-xs font-bold uppercase text-zinc-500">Note globale</span>
+                <div className="flex items-center gap-1">
+                    <Star className="h-4 w-4 fill-[#FFFF00] text-[#FFFF00]" />
+                    <span className="text-sm font-black text-[#FFFF00]">{noteGlobale}/5</span>
+                </div>
+             </div>
+             <p className="mt-2 text-xs text-zinc-400 italic">"{commentaire || "Aucun commentaire"}"</p>
+          </div>
+
           <button onClick={() => navigate("/mes-demandes")}
-            className="mt-6 rounded-2xl px-8 py-3 text-sm font-bold text-white transition-all active:scale-[0.98]"
-            style={{ backgroundColor: "var(--color-primary)" }}>
-            Retour à mes demandes
+            className="mt-10 w-full rounded-2xl bg-[#FFFF00] py-4 text-sm font-black uppercase tracking-widest text-black transition-all active:scale-[0.98]">
+            RETOUR À MES DEMANDES
           </button>
         </div>
       </div>

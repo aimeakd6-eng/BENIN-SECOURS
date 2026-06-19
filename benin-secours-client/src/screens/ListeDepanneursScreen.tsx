@@ -36,7 +36,6 @@ export default function ListeDepanneursScreen() {
   const [error, setError] = useState("");
   const [rayon, setRayon] = useState(10);
   const [searching, setSearching] = useState(false);
-  const [viewMode, setViewMode] = useState<"list" | "map">("list");
 
   useEffect(() => {
     if (!userLocation) {
@@ -56,80 +55,34 @@ export default function ListeDepanneursScreen() {
       undefined,
       categorieVehicule || undefined
     );
-    // Sauvegarder pour DetailDepanneurScreen
-    localStorage.setItem("derniers_prestataires", JSON.stringify(data));
     setPrestataires(data);
     setRayon(r);
     setLoading(false);
     setSearching(false);
     if (data.length === 0) {
       setError(r >= 30
-        ? "Aucun dépanneur disponible dans un rayon de 30 km. Veuillez réessayer plus tard."
-        : `Aucun dépanneur trouvé dans un rayon de ${r} km.`
+        ? "Aucun dépanneur disponible."
+        : `Élargissez votre recherche.`
       );
     }
   };
 
-  const handleExtendSearch = () => {
-    if (rayon < 20) fetchDepanneurs(20);
-    else if (rayon < 30) fetchDepanneurs(30);
-  };
-
   return (
-    <div className="flex min-h-screen flex-col" style={{ backgroundColor: "var(--color-bg)" }}>
-      <header className="flex items-center gap-3 bg-white px-4 py-4 shadow-sm">
-        <button onClick={() => navigate("/signaler-panne")} className="rounded-full p-1.5 text-gray-600 transition-all active:bg-gray-100">
-          <ArrowLeft className="h-5 w-5" />
+    <div className="flex h-screen flex-col bg-[#0F0F0E]">
+      <header className="flex items-center justify-between px-6 py-6">
+        <button onClick={() => navigate(-1)} className="text-white">
+          <ArrowLeft className="h-6 w-6" />
         </button>
-        <div className="flex-1">
-          <h1 className="text-lg font-bold text-gray-900">Dépanneurs</h1>
-          <p className="text-[10px] text-gray-500">{rayon} km · {prestataires.length} trouvé(s)</p>
-        </div>
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() => setViewMode(viewMode === "list" ? "map" : "list")}
-            className="flex h-9 items-center gap-2 rounded-lg bg-gray-100 px-3 text-xs font-bold text-gray-600 transition-all active:scale-95"
-          >
-            {viewMode === "list" ? (
-              <><MapIcon className="h-4 w-4" /> Carte</>
-            ) : (
-              <><List className="h-4 w-4" /> Liste</>
-            )}
-          </button>
-          {searching && <Radio className="h-5 w-5 animate-pulse" style={{ color: "var(--color-primary)" }} />}
-        </div>
+        <h1 className="text-xl font-black text-white uppercase tracking-tight">Prestataires Proches</h1>
+        <button onClick={() => navigate("/")} className="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-800 text-zinc-400">
+          <XCircle className="h-6 w-6" />
+        </button>
       </header>
 
-      <main className="relative flex-1 overflow-hidden">
-        {loading ? (
-          <div className="p-4">
-            <LoadingWidget message="Recherche des dépanneurs..." />
-          </div>
-        ) : viewMode === "list" ? (
-          <div className="h-full overflow-y-auto px-4 py-4">
-            {error && (
-              <div className="mb-4 flex items-start gap-2 rounded-xl bg-amber-50 p-3 text-sm text-amber-700">
-                <AlertCircle className="mt-0.5 h-4 w-4 shrink-0" />
-                <div className="flex-1">
-                  <p>{error}</p>
-                  {rayon < 30 && (
-                    <button onClick={handleExtendSearch} className="mt-2 flex items-center gap-1 text-xs font-semibold" style={{ color: "var(--color-primary)" }}>
-                      <MapPin className="h-3 w-3" />
-                      Élargir à {rayon < 20 ? "20" : "30"} km
-                    </button>
-                  )}
-                </div>
-              </div>
-            )}
-            <div className="space-y-3 pb-20">
-              {prestataires.map((p) => (
-                <DepanneurCard key={p.id} prestataire={p} onClick={() => navigate(`/depanneur/${p.id}`)} />
-              ))}
-            </div>
-          </div>
-        ) : (
-          <div className="h-full w-full">
-            <MapContainer
+      <main className="flex-1 overflow-y-auto">
+        {/* Map Preview */}
+        <div className="mx-6 h-48 overflow-hidden rounded-3xl border border-[#2D2D2A]">
+           <MapContainer
               center={[userLocation?.latitude || 6.365, userLocation?.longitude || 2.418]}
               zoom={13}
               style={{ height: "100%", width: "100%" }}
@@ -137,53 +90,60 @@ export default function ListeDepanneursScreen() {
             >
               <TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                attribution='&copy; OpenStreetMap'
               />
               {userLocation && (
-                <Marker position={[userLocation.latitude, userLocation.longitude]} icon={userIcon}>
-                  <Popup>Vous êtes ici</Popup>
-                </Marker>
+                <Marker position={[userLocation.latitude, userLocation.longitude]} icon={userIcon} />
               )}
-              {prestataires.map((p) => (
-                p.latitude && p.longitude && (
-                  <Marker
-                    key={p.id}
-                    position={[p.latitude, p.longitude]}
-                    icon={defaultIcon}
-                  >
-                    <Popup className="custom-popup">
-                      <div className="p-1">
-                        <p className="font-bold text-gray-900">{p.prenom} {p.nom}</p>
-                        <p className="text-[10px] text-gray-500">{p.nom_atelier}</p>
-                        <p className="mt-1 text-xs font-semibold text-primary-600">{p.type_service}</p>
-                        <button
-                          onClick={() => navigate(`/depanneur/${p.id}`)}
-                          className="mt-2 w-full rounded-md bg-blue-600 py-1.5 text-[10px] font-bold text-white"
-                        >
-                          VOIR FICHE
-                        </button>
-                      </div>
-                    </Popup>
-                  </Marker>
-                )
-              ))}
             </MapContainer>
+        </div>
 
-            {/* Overlay bouton élargir sur la carte */}
-            {error && rayon < 30 && (
-              <div className="absolute bottom-6 left-1/2 z-[1000] -translate-x-1/2">
-                <button
-                  onClick={handleExtendSearch}
-                  className="flex items-center gap-2 rounded-full bg-white px-4 py-2 text-xs font-bold shadow-lg ring-1 ring-black/5 active:scale-95"
-                  style={{ color: "var(--color-primary)" }}
-                >
-                  <MapPin className="h-4 w-4" />
-                  Élargir le rayon ({rayon < 20 ? "20" : "30"} km)
-                </button>
-              </div>
+        {/* Info Badge */}
+        <div className="mt-6 px-6">
+            <div className="flex w-fit items-center gap-2 rounded-full bg-[#FFFF00]/10 px-4 py-2 ring-1 ring-[#FFFF00]/20">
+                <div className="h-2 w-2 animate-pulse rounded-full bg-[#FFFF00]"></div>
+                <span className="text-xs font-black uppercase tracking-widest text-[#FFFF00]">
+                    {prestataires.length} prestataires en ligne à proximité
+                </span>
+            </div>
+        </div>
+
+        {/* Filters */}
+        <div className="mt-8 flex gap-3 overflow-x-auto px-6 pb-2 no-scrollbar">
+            <button className="flex items-center gap-2 shrink-0 rounded-xl bg-[#FFFF00] px-4 py-3 text-sm font-black text-black uppercase">
+                <List className="h-4 w-4" /> Tous
+            </button>
+            <button className="flex items-center gap-2 shrink-0 rounded-xl bg-zinc-800 px-4 py-3 text-sm font-black text-zinc-400 uppercase">
+                <Wrench className="h-4 w-4" /> Mécanicien
+            </button>
+            <button className="flex items-center gap-2 shrink-0 rounded-xl bg-zinc-800 px-4 py-3 text-sm font-black text-zinc-400 uppercase">
+                <Car className="h-4 w-4" /> Remorqueur
+            </button>
+        </div>
+
+        {/* Results */}
+        <div className="mt-6 space-y-4 px-6 pb-24">
+            {loading ? (
+                <div className="flex h-40 flex-col items-center justify-center gap-4">
+                    <div className="h-10 w-10 animate-spin rounded-full border-4 border-[#FFFF00] border-t-transparent"></div>
+                    <p className="text-xs font-bold text-zinc-500 uppercase tracking-widest">Recherche en cours...</p>
+                </div>
+            ) : prestataires.length === 0 ? (
+                <div className="rounded-3xl bg-zinc-900/50 p-8 text-center">
+                    <AlertCircle className="mx-auto mb-4 h-12 w-12 text-zinc-600" />
+                    <p className="text-sm font-bold text-zinc-500 uppercase">{error}</p>
+                    {rayon < 30 && (
+                        <button onClick={() => fetchDepanneurs(rayon + 10)} className="mt-4 text-xs font-black text-[#FFFF00] underline uppercase tracking-widest">
+                            Élargir le rayon à {rayon + 10}km
+                        </button>
+                    )}
+                </div>
+            ) : (
+                prestataires.map((p) => (
+                    <DepanneurCard key={p.id} prestataire={p} onClick={() => navigate(`/depanneur/${p.id}`)} />
+                ))
             )}
-          </div>
-        )}
+        </div>
       </main>
     </div>
   );

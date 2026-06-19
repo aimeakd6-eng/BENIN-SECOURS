@@ -12,8 +12,7 @@ import {
   Search,
   ScrollText,
 } from "lucide-react";
-import Sidebar from "@/components/Sidebar";
-import Header from "@/components/Header";
+import MainLayout from "@/components/MainLayout";
 import { supabase, type AdminAction } from "@/lib/supabase";
 
 const actionConfig: Record<string, { label: string; icon: any; color: string }> = {
@@ -86,113 +85,107 @@ export default function JournalPage() {
   }, [filterAction, search, actions]);
 
   return (
-    <div className="flex">
-      <Sidebar />
-      <main className="ml-64 flex-1">
-        <Header title="Journal" subtitle="Historique des actions administrateur" />
-        <div className="p-6">
-          <div className="mb-6 flex flex-wrap items-center gap-3">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
-              <input
-                type="text"
-                placeholder="Rechercher..."
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="h-10 w-64 rounded-lg border border-gray-300 bg-white pl-10 pr-4 text-sm outline-none focus:border-primary-500"
-              />
-            </div>
-            <select
-              value={filterAction}
-              onChange={(e) => setFilterAction(e.target.value)}
-              className="h-10 rounded-lg border border-gray-300 bg-white px-3 text-sm outline-none focus:border-primary-500"
-            >
-              <option value="">Toutes les actions</option>
-              <option value="valider_prestataire">Validation</option>
-              <option value="suspendre_prestataire">Suspension</option>
-              <option value="rejeter_prestataire">Rejet</option>
-              <option value="reactiver_prestataire">Réactivation</option>
-              <option value="modifier_prestataire">Modification</option>
-              <option value="supprimer_prestataire">Suppression</option>
-            </select>
-          </div>
-
-          {loading ? (
-            <div className="flex h-64 items-center justify-center">
-              <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary-500 border-t-transparent" />
-            </div>
-          ) : filtered.length === 0 ? (
-            <div className="flex h-64 flex-col items-center justify-center text-gray-400">
-              <AlertCircle className="mb-2 h-8 w-8" />
-              <p>Aucune action trouvée</p>
-            </div>
-          ) : (
-            <div className="space-y-3">
-              {filtered.map((action) => {
-                const cfg = actionConfig[action.action] || {
-                  label: action.action,
-                  icon: ScrollText,
-                  color: "text-gray-600 bg-gray-50",
-                };
-                const Icon = cfg.icon;
-                return (
-                  <div
-                    key={action.id}
-                    className="flex items-start gap-4 rounded-xl border border-gray-200 bg-white p-4 transition-all hover:border-primary-200 hover:shadow-sm"
-                  >
-                    <div className={`rounded-xl p-3 ${cfg.color}`}>
-                      <Icon className="h-5 w-5" />
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2">
-                        <span className="font-semibold text-gray-900">
-                          {cfg.label}
-                        </span>
-                        <span className="text-xs text-gray-400">
-                          {new Date(action.date_action).toLocaleDateString(
-                            "fr-FR",
-                            {
-                              day: "2-digit",
-                              month: "2-digit",
-                              year: "numeric",
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            }
-                          )}
-                        </span>
-                      </div>
-                      <p className="mt-1 text-sm text-gray-600">
-                        {action.description}
-                      </p>
-                      {action.motif && (
-                        <p className="mt-1 text-sm text-red-600">
-                          Motif: {action.motif}
-                        </p>
-                      )}
-                      <div className="mt-2 flex items-center gap-4 text-xs text-gray-400">
-                        <span>
-                          Admin:{" "}
-                          <span className="font-medium text-gray-600">
-                            {(action.admin as any)?.full_name || "Système"}
-                          </span>
-                        </span>
-                        <span>
-                          Prestataire:{" "}
-                          <span className="font-medium text-gray-600">
-                            {(action.prestataire as any)
-                              ? `${(action.prestataire as any).prenom} ${(action.prestataire as any).nom}`
-                              : "-"}
-                          </span>
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
+    <MainLayout title="Journal" subtitle="Historique des actions administrateur">
+      <div className="mb-6 flex flex-wrap items-center gap-3">
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-gray-400" />
+          <input
+            type="text"
+            placeholder="Rechercher..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="h-10 w-64 rounded-lg border border-gray-300 bg-white pl-10 pr-4 text-sm outline-none focus:border-primary-500"
+          />
         </div>
-      </main>
-    </div>
+        <select
+          value={filterAction}
+          onChange={(e) => setFilterAction(e.target.value)}
+          className="h-10 rounded-lg border border-gray-300 bg-white px-3 text-sm outline-none focus:border-primary-500"
+        >
+          <option value="">Toutes les actions</option>
+          <option value="valider_prestataire">Validation</option>
+          <option value="suspendre_prestataire">Suspension</option>
+          <option value="rejeter_prestataire">Rejet</option>
+          <option value="reactiver_prestataire">Réactivation</option>
+          <option value="modifier_prestataire">Modification</option>
+          <option value="supprimer_prestataire">Suppression</option>
+        </select>
+      </div>
+
+      {loading ? (
+        <div className="flex h-64 items-center justify-center">
+          <div className="h-8 w-8 animate-spin rounded-full border-4 border-primary-500 border-t-transparent" />
+        </div>
+      ) : filtered.length === 0 ? (
+        <div className="flex h-64 flex-col items-center justify-center text-gray-400">
+          <AlertCircle className="mb-2 h-8 w-8" />
+          <p>Aucune action trouvée</p>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {filtered.map((action) => {
+            const cfg = actionConfig[action.action] || {
+              label: action.action,
+              icon: ScrollText,
+              color: "text-gray-600 bg-gray-50",
+            };
+            const Icon = cfg.icon;
+            return (
+              <div
+                key={action.id}
+                className="flex items-start gap-4 rounded-xl border border-gray-200 bg-white p-4 transition-all hover:border-primary-200 hover:shadow-sm"
+              >
+                <div className={`rounded-xl p-3 ${cfg.color}`}>
+                  <Icon className="h-5 w-5" />
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center gap-2">
+                    <span className="font-semibold text-gray-900">
+                      {cfg.label}
+                    </span>
+                    <span className="text-xs text-gray-400">
+                      {new Date(action.date_action).toLocaleDateString(
+                        "fr-FR",
+                        {
+                          day: "2-digit",
+                          month: "2-digit",
+                          year: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        }
+                      )}
+                    </span>
+                  </div>
+                  <p className="mt-1 text-sm text-gray-600">
+                    {action.description}
+                  </p>
+                  {action.motif && (
+                    <p className="mt-1 text-sm text-red-600">
+                      Motif: {action.motif}
+                    </p>
+                  )}
+                  <div className="mt-2 flex items-center gap-4 text-xs text-gray-400">
+                    <span>
+                      Admin:{" "}
+                      <span className="font-medium text-gray-600">
+                        {(action.admin as any)?.full_name || "Système"}
+                      </span>
+                    </span>
+                    <span>
+                      Prestataire:{" "}
+                      <span className="font-medium text-gray-600">
+                        {(action.prestataire as any)
+                          ? `${(action.prestataire as any).prenom} ${(action.prestataire as any).nom}`
+                          : "-"}
+                      </span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
+    </MainLayout>
   );
 }

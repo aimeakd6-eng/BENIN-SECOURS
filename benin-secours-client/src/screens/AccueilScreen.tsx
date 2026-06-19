@@ -42,19 +42,16 @@ export default function AccueilScreen() {
 
   if (showSplash) {
     return (
-      <div className="flex h-screen flex-col items-center justify-center" style={{ backgroundColor: "var(--color-primary)" }}>
+      <div className="flex h-screen flex-col items-center justify-center bg-[#0F0F0E]">
         <div className="flex flex-col items-center animate-fade-in">
-          <div className="flex h-24 w-24 items-center justify-center rounded-3xl bg-white/20 backdrop-blur-sm">
-            <Shield className="h-12 w-12 text-white" />
+          <div className="flex h-24 w-24 items-center justify-center rounded-3xl bg-[#FFFF00] shadow-[0_0_30px_rgba(255,255,0,0.2)]">
+            <Wrench className="h-12 w-12 text-black" />
           </div>
-          <h1 className="mt-6 text-3xl font-black tracking-tight text-white">
-            BENIN SECOURS
+          <h1 className="mt-8 text-4xl font-black tracking-tighter text-white">
+            BENIN<span className="text-[#FFFF00]">SECOURS</span>
           </h1>
-          <div className="mt-3 h-1 w-24 overflow-hidden rounded-full bg-white/20">
-            <div className="h-full animate-pulse rounded-full bg-white" />
-          </div>
-          <p className="mt-6 text-center text-base font-medium text-white/80">
-            Votre dépanneur en 15 minutes
+          <p className="mt-4 text-center text-sm font-bold uppercase tracking-[0.2em] text-zinc-500">
+            Assistance Routière
           </p>
         </div>
       </div>
@@ -62,114 +59,107 @@ export default function AccueilScreen() {
   }
 
   return (
-    <div className="flex h-screen flex-col" style={{ backgroundColor: "var(--color-bg)" }}>
+    <div className="flex h-screen flex-col bg-[#0F0F0E] text-white">
       {/* Header */}
-      <header className="shrink-0 px-5 pb-2 pt-5" style={{ backgroundColor: "var(--color-primary)" }}>
+      <header className="shrink-0 px-6 pb-6 pt-10">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white/20">
-              <Shield className="h-5 w-5 text-white" />
-            </div>
-            <div>
-              <h1 className="text-lg font-black tracking-tight text-white">
-                BENIN SECOURS
-              </h1>
-            </div>
+          <div className="flex flex-col">
+            <h1 className="text-2xl font-black tracking-tight">
+              ROADA<span className="text-[#FFFF00]">SSIST</span>
+            </h1>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Bénin Secours Platform</p>
           </div>
           {profile && (
             <button
               onClick={() => openDrawer("main")}
-              className="flex h-9 w-9 items-center justify-center rounded-full bg-white/20 text-white transition-all active:bg-white/30"
+              className="flex h-10 w-10 items-center justify-center rounded-xl bg-zinc-900 border border-zinc-800 text-[#FFFF00]"
             >
               <User className="h-5 w-5" />
             </button>
           )}
         </div>
-        <p className="mt-1 text-xs text-white/70">Assistance routière géolocalisée</p>
       </header>
 
       {/* Contenu scrollable */}
-      <main className="flex-1 overflow-y-auto px-4 py-5">
-        <p className="mb-3 text-center text-sm font-medium text-gray-500">
-          Choisissez votre véhicule
-        </p>
+      <main className="flex-1 overflow-y-auto px-6 py-4">
+        <div className="mb-8">
+          <h2 className="text-3xl font-black">Bienvenue</h2>
+          <p className="text-zinc-500 font-medium">Quel est votre problème aujourd'hui ?</p>
+        </div>
 
-        {/* Tuile Moto */}
-        <button
-          onClick={() => {
-            localStorage.setItem("categorie_vehicule", "Moto");
-            navigate("/signaler-panne");
-          }}
-          className="group relative mb-4 flex w-full items-center gap-6 rounded-3xl bg-white p-6 shadow-xl shadow-orange-100 ring-1 ring-orange-50 transition-all active:scale-[0.97]"
-        >
-          <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-orange-400 to-orange-600 shadow-lg shadow-orange-200">
-            <svg viewBox="0 0 24 24" className="h-12 w-12 fill-white">
-              <path d="M15.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM5 20c0 1.65 1.35 3 3 3s3-1.35 3-3-1.35-3-3-3-3 1.35-3 3zm14-5c-1.65 0-3 1.35-3 3s1.35 3 3 3 3-1.35 3-3-1.35-3-3-3zm-9.3-4.7l2.8-4.8c.3-.5 1-.6 1.4-.3.5.3.6 1 .3 1.4L11.5 11H16c.6 0 1 .4 1 1s-.4 1-1 1h-5.5c-.3 0-.6-.1-.8-.4l-2-3.3-3.7 3.7V17h2v2H4c-.6 0-1-.4-1-1v-5c0-.3.1-.5.3-.7l4.4-4.4c.3-.3.8-.4 1.2-.2z" />
-            </svg>
-          </div>
-          <div className="text-left">
-            <span className="block text-xl font-black tracking-tight text-gray-900 uppercase">En Moto</span>
-            <span className="mt-0.5 block text-sm font-medium text-gray-400">Dépannage 2 roues rapide</span>
-            <div className="mt-2 flex items-center gap-1.5">
-               <span className="h-1.5 w-1.5 rounded-full bg-orange-500"></span>
-               <span className="text-[10px] font-bold uppercase tracking-widest text-orange-600">Disponible</span>
+        <div className="space-y-4">
+          {/* Tuile Moto */}
+          <button
+            onClick={() => {
+              localStorage.setItem("categorie_vehicule", "Moto");
+              navigate("/signaler-panne");
+            }}
+            className="group relative flex w-full items-center gap-6 rounded-3xl bg-[#1C1C1A] p-6 border border-[#2D2D2A] transition-all active:scale-[0.97]"
+          >
+            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-[#FFFF00]">
+              <svg viewBox="0 0 24 24" className="h-10 w-10 fill-black">
+                <path d="M15.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM5 20c0 1.65 1.35 3 3 3s3-1.35 3-3-1.35-3-3-3-3 1.35-3 3zm14-5c-1.65 0-3 1.35-3 3s1.35 3 3 3 3-1.35 3-3-1.35-3-3-3zm-9.3-4.7l2.8-4.8c.3-.5 1-.6 1.4-.3.5.3.6 1 .3 1.4L11.5 11H16c.6 0 1 .4 1 1s-.4 1-1 1h-5.5c-.3 0-.6-.1-.8-.4l-2-3.3-3.7 3.7V17h2v2H4c-.6 0-1-.4-1-1v-5c0-.3.1-.5.3-.7l4.4-4.4c.3-.3.8-.4 1.2-.2z" />
+              </svg>
             </div>
-          </div>
-          <ChevronRight className="ml-auto h-6 w-6 text-gray-200" />
-        </button>
+            <div className="text-left">
+              <span className="block text-lg font-black uppercase tracking-tight text-white">Moto</span>
+              <span className="text-sm font-medium text-zinc-500">Dépannage 2 roues</span>
+            </div>
+            <div className="ml-auto flex h-10 w-10 items-center justify-center rounded-full bg-zinc-800">
+              <ChevronRight className="h-5 w-5 text-[#FFFF00]" />
+            </div>
+          </button>
 
-        {/* Tuile Véhicule */}
-        <button
-          onClick={() => {
-            localStorage.setItem("categorie_vehicule", "Véhicule");
-            navigate("/signaler-panne");
-          }}
-          className="group relative flex w-full items-center gap-6 rounded-3xl bg-white p-6 shadow-xl shadow-blue-100 ring-1 ring-blue-50 transition-all active:scale-[0.97]"
-        >
-          <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-blue-500 to-blue-700 shadow-lg shadow-blue-200">
-             <Car className="h-12 w-12 text-white" />
-          </div>
-          <div className="text-left">
-            <span className="block text-xl font-black tracking-tight text-gray-900 uppercase">En Véhicule</span>
-            <span className="mt-0.5 block text-sm font-medium text-gray-400">Voiture, 4x4 & Camionnettes</span>
-            <div className="mt-2 flex items-center gap-1.5">
-               <span className="h-1.5 w-1.5 rounded-full bg-blue-500"></span>
-               <span className="text-[10px] font-bold uppercase tracking-widest text-blue-600">Disponible</span>
+          {/* Tuile Véhicule */}
+          <button
+            onClick={() => {
+              localStorage.setItem("categorie_vehicule", "Véhicule");
+              navigate("/signaler-panne");
+            }}
+            className="group relative flex w-full items-center gap-6 rounded-3xl bg-[#1C1C1A] p-6 border border-[#2D2D2A] transition-all active:scale-[0.97]"
+          >
+            <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-[#FFFF00]">
+               <Car className="h-10 w-10 text-black" />
             </div>
-          </div>
-          <ChevronRight className="ml-auto h-6 w-6 text-gray-200" />
-        </button>
+            <div className="text-left">
+              <span className="block text-lg font-black uppercase tracking-tight text-white">Véhicule</span>
+              <span className="text-sm font-medium text-zinc-500">Voiture & Camion</span>
+            </div>
+            <div className="ml-auto flex h-10 w-10 items-center justify-center rounded-full bg-zinc-800">
+              <ChevronRight className="h-5 w-5 text-[#FFFF00]" />
+            </div>
+          </button>
+        </div>
+
+        {/* SOS Card style from screenshot */}
+        <div className="mt-8 rounded-3xl bg-gradient-to-br from-red-600 to-red-900 p-6 shadow-xl shadow-red-900/20">
+            <div className="flex items-center justify-between">
+                <div>
+                    <h3 className="text-xl font-black uppercase italic">Urgence SOS</h3>
+                    <p className="text-xs font-bold text-red-200">En cas d'accident grave</p>
+                </div>
+                <button className="flex h-12 w-12 items-center justify-center rounded-full bg-white text-red-600 shadow-lg animate-pulse">
+                    <Phone className="h-6 w-6" />
+                </button>
+            </div>
+        </div>
       </main>
 
-      {/* Bottom Navigation */}
-      <nav className="shrink-0 flex h-16 items-center justify-around border-t border-gray-200 bg-white z-30">
-        <button onClick={() => {}} className="flex flex-col items-center gap-0.5 px-3 py-1">
-          <Shield className="h-5 w-5" style={{ color: "var(--color-primary)" }} />
-          <span className="text-[10px] font-medium" style={{ color: "var(--color-primary)" }}>Accueil</span>
+      {/* Bottom Navigation Dark */}
+      <nav className="shrink-0 flex h-20 items-center justify-around bg-[#1C1C1A] border-t border-[#2D2D2A] px-2">
+        <button onClick={() => {}} className="flex flex-col items-center gap-1">
+          <div className="p-2 rounded-xl bg-[#FFFF00]/10">
+            <Shield className="h-6 w-6 text-[#FFFF00]" />
+          </div>
+          <span className="text-[10px] font-bold uppercase tracking-widest text-[#FFFF00]">Accueil</span>
         </button>
-        <button onClick={() => navigate("/mes-demandes")} className="flex flex-col items-center gap-0.5 px-3 py-1 text-gray-400">
-          <History className="h-5 w-5" />
-          <span className="text-[10px] font-medium">Historique</span>
+        <button onClick={() => navigate("/mes-demandes")} className="flex flex-col items-center gap-1 text-zinc-500">
+          <History className="h-6 w-6" />
+          <span className="text-[10px] font-bold uppercase tracking-widest">Historique</span>
         </button>
-
-        {/* Bouton SOS au centre */}
-        <button
-          onClick={() => {
-            navigate("/signaler-panne");
-          }}
-          className="flex -mt-6 h-14 w-14 items-center justify-center rounded-full shadow-lg shadow-red-300 transition-all active:scale-90"
-          style={{ backgroundColor: "var(--color-sos)" }}
-        >
-          <Phone className="h-6 w-6 text-white" />
-        </button>
-
-        <button onClick={() => {}} className="flex flex-col items-center gap-0.5 px-3 py-1 text-gray-400">
-          <Bell className="h-5 w-5" />
-          <span className="text-[10px] font-medium">Urgence</span>
-        </button>
-        <button onClick={() => openDrawer("main")} className="flex flex-col items-center gap-0.5 px-3 py-1 text-gray-400">
-          <Settings className="h-5 w-5" />
-          <span className="text-[10px] font-medium">Plus</span>
+        <button onClick={() => openDrawer("main")} className="flex flex-col items-center gap-1 text-zinc-500">
+          <Settings className="h-6 w-6" />
+          <span className="text-[10px] font-bold uppercase tracking-widest">Plus</span>
         </button>
       </nav>
 

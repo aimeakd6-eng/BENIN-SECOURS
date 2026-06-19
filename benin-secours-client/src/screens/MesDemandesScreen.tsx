@@ -25,7 +25,6 @@ export default function MesDemandesScreen() {
     if (!profile) { navigate("/login"); return; }
     getMesDemandes(profile.id).then((data) => {
       setDemandes(data);
-      localStorage.setItem("mes_demandes", JSON.stringify(data));
       setLoading(false);
     });
   }, [profile, authLoading]);
@@ -33,72 +32,73 @@ export default function MesDemandesScreen() {
   if (authLoading || loading) return <LoadingWidget fullScreen />;
 
   return (
-    <div className="flex h-screen flex-col" style={{ backgroundColor: "var(--color-bg)" }}>
-      <header className="flex items-center gap-3 bg-white px-4 py-4 shadow-sm">
-        <button onClick={() => navigate("/")} className="rounded-full p-1.5 text-gray-600 transition-all active:bg-gray-100">
-          <ArrowLeft className="h-5 w-5" />
+    <div className="flex h-screen flex-col bg-[#0F0F0E]">
+      <header className="flex items-center justify-between px-6 py-6 text-white">
+        <button onClick={() => navigate("/")} className="text-white">
+          <ArrowLeft className="h-6 w-6" />
         </button>
-        <h1 className="text-lg font-bold text-gray-900">Mes demandes</h1>
+        <h1 className="text-xl font-black uppercase tracking-tight">Historique</h1>
+        <button onClick={() => navigate("/")} className="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-800 text-zinc-400">
+          <XCircle className="h-6 w-6" />
+        </button>
       </header>
 
-      <main className="flex-1 overflow-y-auto px-4 py-4">
-        {demandes.length === 0 ? (
-          <div className="flex flex-col items-center justify-center py-16 text-gray-400">
-            <AlertCircle className="mb-3 h-12 w-12" />
-            <p className="text-sm">Aucune demande pour le moment</p>
-            <button onClick={() => navigate("/")}
-              className="mt-4 rounded-xl px-6 py-3 text-sm font-bold text-white" style={{ backgroundColor: "var(--color-primary)" }}>
-              Faire une demande
+      <main className="flex-1 overflow-y-auto px-6">
+        {/* Top Filters */}
+        <div className="mb-8 flex gap-3 overflow-x-auto pb-2 no-scrollbar">
+            <button className="flex items-center gap-2 shrink-0 rounded-xl bg-[#FFFF00] px-4 py-3 text-xs font-black text-black uppercase tracking-widest shadow-lg shadow-[#FFFF00]/10">
+                <Clock className="h-4 w-4" /> Tous les mois
             </button>
+            <button className="flex items-center gap-2 shrink-0 rounded-xl bg-zinc-800 px-4 py-3 text-xs font-black text-zinc-400 uppercase tracking-widest">
+                <Wrench className="h-4 w-4" /> Type de service
+            </button>
+        </div>
+
+        {demandes.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-20 text-zinc-600">
+            <AlertCircle className="mb-4 h-16 w-12" />
+            <p className="text-sm font-bold uppercase tracking-widest">Aucune demande trouvée</p>
           </div>
         ) : (
-          <div className="space-y-3">
-            {demandes.map((d) => {
-              const cfg = statutConfig[d.statut] || statutConfig.en_attente;
-              const Icon = cfg.icon;
-              return (
-                <button key={d.id} onClick={() => navigate(`/demande/${d.id}`)}
-                  className="w-full rounded-2xl bg-white p-4 text-left shadow-sm transition-all active:scale-[0.98]">
-                  <div className="flex items-center gap-2">
-                    <h3 className="font-semibold text-gray-900">{d.type_panne}</h3>
-                    <span className="text-xs">{d.categorie_vehicule === "Moto" ? "🏍️" : "🚗"}</span>
-                  </div>
-                  <p className="mt-1 text-xs text-gray-500">{d.description || "Pas de description"}</p>
-                  <div className="mt-2 flex items-center gap-3">
-                    <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium ${cfg.className}`}>
-                      <Icon className="h-3 w-3" />{cfg.label}
-                    </span>
-                    <span className="text-xs text-gray-400">
-                      {new Date(d.created_at).toLocaleDateString("fr-FR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" })}
-                    </span>
-                  </div>
-                </button>
-              );
-            })}
+          <div className="space-y-8 pb-10">
+            {/* Grouping logic could be added here, for now simple list with month label */}
+            <div className="space-y-4">
+                <p className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-600">Demandes récentes</p>
+                {demandes.map((d) => (
+                    <div key={d.id} className="rounded-3xl bg-[#1C1C1A] p-6 border border-[#2D2D2A] shadow-xl">
+                        <div className="flex items-start justify-between">
+                            <div className="flex gap-4">
+                                <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#FFFF00]/10 text-[#FFFF00]">
+                                    {d.categorie_vehicule === "Moto" ? <svg className="h-6 w-6 fill-current" viewBox="0 0 24 24"><path d="M15.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM5 20c0 1.65 1.35 3 3 3s3-1.35 3-3-1.35-3-3-3-3 1.35-3 3zm14-5c-1.65 0-3 1.35-3 3s1.35 3 3 3 3-1.35 3-3-1.35-3-3-3zm-9.3-4.7l2.8-4.8c.3-.5 1-.6 1.4-.3.5.3.6 1 .3 1.4L11.5 11H16c.6 0 1 .4 1 1s-.4 1-1 1h-5.5c-.3 0-.6-.1-.8-.4l-2-3.3-3.7 3.7V17h2v2H4c-.6 0-1-.4-1-1v-5c0-.3.1-.5.3-.7l4.4-4.4c.3-.3.8-.4 1.2-.2z"/></svg> : <Car className="h-6 w-6" />}
+                                </div>
+                                <div>
+                                    <h3 className="text-lg font-black text-white">{d.type_panne}</h3>
+                                    <p className="text-xs font-bold text-zinc-500 uppercase">{d.statut}</p>
+                                </div>
+                            </div>
+                            <div className="text-right">
+                                <p className="text-lg font-black text-[#FFFF00]">-- FCFA</p>
+                                <p className="text-[10px] font-bold text-zinc-600 uppercase mt-1">
+                                    {new Date(d.created_at).toLocaleDateString("fr-FR", { day: "2-digit", month: "short" })}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div className="mt-6 flex gap-3">
+                            <button onClick={() => navigate(`/demande/${d.id}`)}
+                                className="flex-1 rounded-xl bg-zinc-800 py-3 text-xs font-black uppercase tracking-widest text-zinc-300 transition-all active:scale-95">
+                                Détails
+                            </button>
+                            <button className="flex-1 rounded-xl bg-[#FFFF00] py-3 text-xs font-black uppercase tracking-widest text-black transition-all active:scale-95 shadow-lg shadow-[#FFFF00]/10">
+                                Facture
+                            </button>
+                        </div>
+                    </div>
+                ))}
+            </div>
           </div>
         )}
       </main>
-
-      {/* Bottom Navigation */}
-      <nav className="shrink-0 flex h-16 items-center justify-around border-t border-gray-200 bg-white">
-        <button onClick={() => navigate("/")} className="flex flex-col items-center gap-0.5 px-3 py-1 text-gray-400">
-          <Home className="h-5 w-5" /><span className="text-[10px] font-medium">Accueil</span>
-        </button>
-        <button onClick={() => {}} className="flex flex-col items-center gap-0.5 px-3 py-1" style={{ color: "var(--color-primary)" }}>
-          <Clock className="h-5 w-5" /><span className="text-[10px] font-medium">Historique</span>
-        </button>
-        <button onClick={() => navigate("/signaler-panne")}
-          className="flex -mt-6 h-14 w-14 items-center justify-center rounded-full shadow-lg transition-all active:scale-90"
-          style={{ backgroundColor: "var(--color-sos)" }}>
-          <AlertCircle className="h-6 w-6 text-white" />
-        </button>
-        <button onClick={() => {}} className="flex flex-col items-center gap-0.5 px-3 py-1 text-gray-400">
-          <BellIcon className="h-5 w-5" /><span className="text-[10px] font-medium">Urgence</span>
-        </button>
-        <button onClick={() => {}} className="flex flex-col items-center gap-0.5 px-3 py-1 text-gray-400">
-          <Shield className="h-5 w-5" /><span className="text-[10px] font-medium">Plus</span>
-        </button>
-      </nav>
     </div>
   );
 }
