@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, Eye, EyeOff, Wrench, Hammer, X } from "lucide-react";
+import { ArrowLeft, Eye, EyeOff, Shield } from "lucide-react";
 import { signIn } from "@/services/auth_service";
 import { useAuth } from "@/context/AuthContext";
 
@@ -35,93 +35,57 @@ export default function LoginScreen() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#0F0F0E] text-white">
-      <header className="flex items-center justify-between px-6 py-6">
-        <button onClick={() => navigate("/")} className="text-zinc-400">
+    <div className="flex min-h-screen flex-col bg-gray-50">
+      <header className="flex items-center gap-3 px-4 py-6 bg-[#0066CC] text-white shadow-md">
+        <button onClick={() => navigate("/")} className="rounded-full p-1.5 text-white/80 transition-all active:bg-white/20">
           <ArrowLeft className="h-6 w-6" />
         </button>
-        <h1 className="text-xl font-black uppercase tracking-[0.2em]">ROAD<span className="text-[#FFFF00]">ASSIST</span></h1>
-        <button onClick={() => navigate("/")} className="text-zinc-400">
-          <X className="h-6 w-6" />
-        </button>
+        <h1 className="text-lg font-bold">Connexion</h1>
       </header>
 
-      <main className="flex-1 px-8 py-4">
+      <main className="flex-1 px-8 py-10">
         <div className="mb-10 flex flex-col items-center">
-          <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-[#FFFF00] shadow-xl shadow-[#FFFF00]/10">
-            <div className="relative">
-                <Wrench className="h-8 w-8 text-black" />
-                <Hammer className="absolute -bottom-1 -right-1 h-4 w-4 text-black" />
-            </div>
+          <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-white shadow-xl shadow-blue-100 mb-4 border border-blue-50">
+            <Shield className="h-10 w-10 text-[#0066CC]" />
           </div>
-          <h2 className="mt-8 text-4xl font-black tracking-tight">Bienvenue</h2>
-          <p className="mt-2 text-zinc-500 font-medium tracking-wide uppercase text-[10px]">Identifiez-vous pour continuer</p>
+          <h2 className="text-2xl font-bold text-gray-900">Bon retour !</h2>
+          <p className="text-sm text-gray-500 mt-1">Connectez-vous pour continuer</p>
         </div>
 
         {error && (
-          <div className="mb-6 rounded-xl border border-red-900/50 bg-red-900/10 p-4 text-xs font-bold uppercase tracking-widest text-red-500">
-            {error}
-          </div>
+          <div className="mb-6 rounded-xl bg-red-50 p-4 text-sm text-red-700 border border-red-100">{error}</div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label className="mb-2 block text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">
-              Adresse e-mail
-            </label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full rounded-2xl border border-zinc-800 bg-[#1C1C1A] px-5 py-4 text-sm font-medium outline-none transition-all focus:border-[#FFFF00] focus:ring-1 focus:ring-[#FFFF00]"
-              placeholder="nom@exemple.com"
-            />
+            <label className="mb-1.5 block text-xs font-bold text-gray-500 uppercase tracking-widest">Email</label>
+            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required
+              className="w-full rounded-2xl border border-gray-200 bg-white px-5 py-4 text-sm outline-none transition-all focus:border-[#0066CC] focus:ring-4 focus:ring-blue-50"
+              placeholder="votre@email.com" />
           </div>
 
           <div>
-            <label className="mb-2 block text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">
-              Mot de passe
-            </label>
+            <label className="mb-1.5 block text-xs font-bold text-gray-500 uppercase tracking-widest">Mot de passe</label>
             <div className="relative">
-              <input
-                type={showPassword ? "text" : "password"}
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="w-full rounded-2xl border border-zinc-800 bg-[#1C1C1A] px-5 py-4 text-sm font-medium outline-none transition-all focus:border-[#FFFF00] focus:ring-1 focus:ring-[#FFFF00]"
-                placeholder="Entrez votre mot de passe"
-              />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-600"
-              >
+              <input type={showPassword ? "text" : "password"} value={password} onChange={(e) => setPassword(e.target.value)} required
+                className="w-full rounded-2xl border border-gray-200 bg-white px-5 py-4 text-sm outline-none transition-all focus:border-[#0066CC] focus:ring-4 focus:ring-blue-50"
+                placeholder="••••••••" />
+              <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400">
                 {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
               </button>
             </div>
           </div>
 
-          <button
-            type="submit"
-            disabled={loading}
-            className="mt-4 w-full rounded-2xl bg-[#FFFF00] py-4 text-sm font-black uppercase tracking-[0.2em] text-black shadow-xl shadow-[#FFFF00]/10 transition-all active:scale-[0.98] disabled:opacity-50"
-          >
-            {loading ? "Connexion..." : "Se connecter"}
+          <button type="submit" disabled={loading}
+            className="mt-4 w-full rounded-2xl bg-[#0066CC] py-5 text-sm font-bold text-white shadow-xl shadow-blue-200 transition-all active:scale-[0.98] disabled:opacity-50">
+            {loading ? "Connexion..." : "SE CONNECTER"}
           </button>
         </form>
 
-        <div className="mt-10 flex flex-col items-center gap-4">
-            <p className="text-[10px] font-black uppercase tracking-[0.1em] text-zinc-600">
-                Pas de compte ?{" "}
-                <button onClick={() => navigate("/register")} className="text-[#FFFF00]">
-                    S&apos;inscrire
-                </button>
-            </p>
-
-            <div className="mt-10 h-1 w-12 rounded-full bg-zinc-800"></div>
-            <p className="text-[8px] font-black uppercase tracking-[0.5em] text-zinc-800">Bénin Secours © 2024</p>
-        </div>
+        <p className="mt-10 text-center text-sm text-gray-500">
+          Pas encore de compte ?{" "}
+          <button onClick={() => navigate("/register")} className="font-bold text-[#0066CC]">S&apos;inscrire</button>
+        </p>
       </main>
     </div>
   );
