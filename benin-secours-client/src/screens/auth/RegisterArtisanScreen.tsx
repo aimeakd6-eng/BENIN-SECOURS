@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, MapPin, Upload, Shield, CheckCircle } from "lucide-react";
+import { CheckCircle } from "lucide-react";
 import { supabase } from "@/config/supabase";
 
 const typesService = ["Mécanique", "Électricité", "Pneu", "Remorquage", "Vidange", "Batterie"];

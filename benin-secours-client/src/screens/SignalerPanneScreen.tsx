@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, MapPin, XCircle } from "lucide-react";
+import { ArrowLeft, MapPin, XCircle, Wrench, Car } from "lucide-react";
 import { getCurrentPosition } from "@/services/location_service";
 import { useDemande } from "@/context/DemandeContext";
 import { TYPES_PANNE } from "@/types";
@@ -61,7 +61,6 @@ export default function SignalerPanneScreen() {
 
   return (
     <div className="flex h-screen flex-col bg-[#0F0F0E] text-white">
-      {/* Header */}
       <header className="flex items-center justify-between px-6 py-6">
         <button onClick={() => navigate("/")} className="text-zinc-400">
           <ArrowLeft className="h-6 w-6" />
@@ -80,7 +79,6 @@ export default function SignalerPanneScreen() {
             </div>
         ) : (
           <>
-            {/* Map Preview */}
             <div className="h-40 w-full overflow-hidden rounded-3xl border border-[#2D2D2A]">
                <MapContainer
                   center={[userLocation?.latitude || 6.365, userLocation?.longitude || 2.418]}
@@ -93,7 +91,6 @@ export default function SignalerPanneScreen() {
                 </MapContainer>
             </div>
 
-            {/* GPS Badge */}
             <div className="mt-6">
                 <div className="flex w-fit items-center gap-2 rounded-full bg-[#FFFF00]/10 px-4 py-2 ring-1 ring-[#FFFF00]/20">
                     <MapPin className="h-4 w-4 text-[#FFFF00]" />
@@ -101,7 +98,6 @@ export default function SignalerPanneScreen() {
                 </div>
             </div>
 
-            {/* Type de panne Selection */}
             <div className="mt-10">
                 <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-600 mb-4">Type de problème</h2>
                 <div className="grid grid-cols-2 gap-3 pb-4">
@@ -122,7 +118,6 @@ export default function SignalerPanneScreen() {
                 </div>
             </div>
 
-            {/* Description */}
             <div className="mt-6 mb-10">
                 <h2 className="text-[10px] font-black uppercase tracking-[0.3em] text-zinc-600 mb-4">Commentaires</h2>
                 <textarea
@@ -137,7 +132,6 @@ export default function SignalerPanneScreen() {
         )}
       </main>
 
-      {/* Action Button */}
       {!loading && (
         <footer className="shrink-0 p-6 bg-[#0F0F0E] border-t border-zinc-900">
           <button

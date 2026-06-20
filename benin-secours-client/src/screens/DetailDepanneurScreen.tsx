@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   ArrowLeft, Phone, MessageCircle, MapPin, Star,
-  CheckCircle2, AlertTriangle, XCircle, Wrench, Shield
+  CheckCircle, AlertTriangle, XCircle, Wrench, Shield
 } from "lucide-react";
 import { useDemande } from "@/context/DemandeContext";
 import { useAuth } from "@/context/AuthContext";
@@ -61,7 +61,6 @@ export default function DetailDepanneurScreen() {
       </header>
 
       <main className="flex-1 overflow-y-auto px-6">
-        {/* Profile Card */}
         <div className="rounded-3xl bg-[#1C1C1A] p-8 border border-[#2D2D2A] shadow-2xl">
           <div className="flex flex-col items-center text-center">
             <div className="relative">
@@ -73,7 +72,7 @@ export default function DetailDepanneurScreen() {
                    )}
                 </div>
                 <div className="absolute -bottom-2 -right-2 h-8 w-8 rounded-full bg-[#FFFF00] border-4 border-[#1C1C1A] flex items-center justify-center">
-                    <CheckCircle2 className="h-4 w-4 text-black" strokeWidth={3} />
+                    <CheckCircle className="h-4 w-4 text-black" strokeWidth={3} />
                 </div>
             </div>
 
@@ -111,7 +110,6 @@ export default function DetailDepanneurScreen() {
           </div>
         </div>
 
-        {/* Action Buttons */}
         <div className="mt-6 grid grid-cols-2 gap-4">
           <a href={`tel:${prestataire.telephone}`}
             className="flex flex-col items-center justify-center gap-2 rounded-3xl bg-zinc-800 p-6 border border-zinc-700 transition-all active:scale-[0.95]">
@@ -120,7 +118,7 @@ export default function DetailDepanneurScreen() {
           </a>
           <a href={`https://wa.me/${prestataire.whatsapp?.replace(/\+/g, "")}`} target="_blank" rel="noopener noreferrer"
             className="flex flex-col items-center justify-center gap-2 rounded-3xl bg-zinc-800 p-6 border border-zinc-700 transition-all active:scale-[0.95]">
-            <MessageCircle className="h-6 w-6 text-emerald-500" />
+            <MessageCircle className="h-4 w-4 text-emerald-500" />
             <span className="text-[10px] font-black uppercase tracking-widest text-white">WhatsApp</span>
           </a>
         </div>
