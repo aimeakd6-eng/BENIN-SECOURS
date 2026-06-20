@@ -15,4 +15,8 @@
     color: #FFFFFF;
     font-family: 'Inter', system-ui, sans-serif;
   }
+  input, select, textarea {
+    color: white !important;
+    background-color: #1C1C1A !important;
+  }
 }

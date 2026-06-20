@@ -85,7 +85,7 @@ export default function LoginScreen() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full rounded-2xl border border-zinc-800 bg-[#1C1C1A] px-5 py-4 text-sm font-medium text-white outline-none transition-all focus:border-[#FFFF00]"
+              className="w-full rounded-2xl border border-zinc-800 bg-[#1C1C1A] px-5 py-4 text-sm font-medium text-white !text-white outline-none transition-all focus:border-[#FFFF00]"
               placeholder="nom@exemple.com"
             />
           </div>
@@ -100,7 +100,7 @@ export default function LoginScreen() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full rounded-2xl border border-zinc-800 bg-[#1C1C1A] px-5 py-4 text-sm font-medium text-white outline-none transition-all focus:border-[#FFFF00]"
+                className="w-full rounded-2xl border border-zinc-800 bg-[#1C1C1A] px-5 py-4 text-sm font-medium text-white !text-white outline-none transition-all focus:border-[#FFFF00]"
                 placeholder="Entrez votre mot de passe"
               />
               <button

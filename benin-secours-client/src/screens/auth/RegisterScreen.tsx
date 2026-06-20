@@ -111,7 +111,7 @@ export default function RegisterScreen() {
                 value={(form as any)[field.name]}
                 onChange={handleChange}
                 required
-                className="w-full rounded-2xl border border-zinc-800 bg-[#1C1C1A] px-5 py-4 text-sm font-medium text-white outline-none transition-all focus:border-[#FFFF00]"
+                className="w-full rounded-2xl border border-zinc-800 bg-[#1C1C1A] px-5 py-4 text-sm font-medium text-white !text-white outline-none transition-all focus:border-[#FFFF00]"
                 placeholder={field.placeholder}
               />
             </div>
@@ -128,7 +128,7 @@ export default function RegisterScreen() {
                 value={form.password}
                 onChange={handleChange}
                 required
-                className="w-full rounded-2xl border border-zinc-800 bg-[#1C1C1A] px-5 py-4 text-sm font-medium text-white outline-none transition-all focus:border-[#FFFF00]"
+                className="w-full rounded-2xl border border-zinc-800 bg-[#1C1C1A] px-5 py-4 text-sm font-medium text-white !text-white outline-none transition-all focus:border-[#FFFF00]"
                 placeholder="Minimum 6 caractères"
               />
               <button
@@ -151,7 +151,7 @@ export default function RegisterScreen() {
                 value={form.confirmPassword}
                 onChange={handleChange}
                 required
-                className="w-full rounded-2xl border border-zinc-800 bg-[#1C1C1A] px-5 py-4 text-sm font-medium text-white outline-none transition-all focus:border-[#FFFF00]"
+                className="w-full rounded-2xl border border-zinc-800 bg-[#1C1C1A] px-5 py-4 text-sm font-medium text-white !text-white outline-none transition-all focus:border-[#FFFF00]"
                 placeholder="••••••••"
             />
           </div>
