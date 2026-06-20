@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Shield, User, History, Settings, ChevronRight, Wrench, Car, Phone } from "lucide-react";
+import { Shield, User, History, Settings, ChevronRight, Wrench, Car, Phone, LogOut } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { signOut } from "@/services/auth_service";
 
@@ -135,9 +135,9 @@ export default function AccueilScreen() {
           <History className="h-6 w-6" />
           <span className="text-[10px] font-bold uppercase tracking-widest">Historique</span>
         </button>
-        <button onClick={() => navigate("/login")} className="flex flex-col items-center gap-1 text-zinc-500">
-          <Settings className="h-6 w-6" />
-          <span className="text-[10px] font-bold uppercase tracking-widest">Compte</span>
+        <button onClick={async () => { await signOut(); window.location.href="/login"; }} className="flex flex-col items-center gap-1 text-zinc-500">
+          <LogOut className="h-6 w-6" />
+          <span className="text-[10px] font-bold uppercase tracking-widest">Sortir</span>
         </button>
       </nav>
     </div>
