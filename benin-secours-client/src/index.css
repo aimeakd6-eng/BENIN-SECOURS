@@ -3,40 +3,27 @@
 @tailwind utilities;
 
 :root {
-  --color-primary: #FFFF00; /* Jaune vif */
-  --color-primary-dark: #CCCC00;
-  --color-bg: #0F0F0E; /* Noir très sombre */
-  --color-card: #1C1C1A; /* Gris anthracite pour les cartes */
-  --color-text: #FFFFFF;
-  --color-text-muted: #A1A1AA;
-  --color-border: #2D2D2A;
+  --color-primary: #0066CC;
+  --color-primary-light: #E6F0FA;
+  --color-orange: #F59E0B;
+  --color-orange-light: #FEF3C7;
+  --color-bg: #F9FAFB;
+  --color-sos: #EF4444;
 }
 
 @layer base {
   body {
     background-color: var(--color-bg);
-    color: var(--color-text);
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    color: #111827;
+    font-family: 'Inter', system-ui, sans-serif;
   }
 }
 
 @layer components {
-  .btn-yellow {
-    @apply flex items-center justify-center gap-2 rounded-xl bg-[#FFFF00] px-4 py-4 text-sm font-black uppercase tracking-wider text-black transition-all active:scale-95;
+  .btn-primary {
+    @apply flex items-center justify-center gap-2 rounded-2xl bg-[#0066CC] px-4 py-4 text-sm font-bold text-white transition-all active:scale-95;
   }
-  .card-dark {
-    @apply rounded-2xl border border-[#2D2D2A] bg-[#1C1C1A] p-5 shadow-lg;
+  .card-premium {
+    @apply rounded-3xl bg-white p-6 shadow-sm border border-gray-100;
   }
-  .input-dark {
-    @apply w-full rounded-xl border border-[#2D2D2A] bg-[#1C1C1A] px-4 py-4 text-white outline-none focus:border-[#FFFF00] focus:ring-1 focus:ring-[#FFFF00];
-  }
-}
-
-/* Animations */
-@keyframes slideUp {
-  from { transform: translateY(100%); }
-  to { transform: translateY(0); }
-}
-.animate-slide-up {
-  animation: slideUp 0.3s ease-out;
 }

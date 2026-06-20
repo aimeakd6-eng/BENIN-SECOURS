@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { CheckCircle } from "lucide-react";
+import { CheckCircle, ArrowLeft, Upload, MapPin, X } from "lucide-react";
 import { supabase } from "@/config/supabase";
 
 const typesService = ["Mécanique", "Électricité", "Pneu", "Remorquage", "Vidange", "Batterie"];
@@ -57,7 +57,7 @@ export default function RegisterArtisanScreen() {
   };
 
   const uploadFile = async (file: File, path: string) => {
-    const fileName = `${Date.now()}_${file.name}`;
+    const fileName = `${Date.now()}_${file.name.replace(/\s/g, "_")}`;
     const { data, error } = await supabase.storage
       .from("documents")
       .upload(`${path}/${fileName}`, file);
@@ -70,7 +70,6 @@ export default function RegisterArtisanScreen() {
     setLoading(true);
     setError("");
     try {
-      // 1. Création du compte Auth
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email: form.email,
         password: form.password,
@@ -87,13 +86,11 @@ export default function RegisterArtisanScreen() {
       const userId = authData.user?.id;
       if (!userId) throw new Error("Erreur de création d'utilisateur");
 
-      // 2. Upload des documents
       const cipUrl = files.photo_cip ? await uploadFile(files.photo_cip, "cip") : null;
       const cnibUrl = files.photo_cnib ? await uploadFile(files.photo_cnib, "cnib") : null;
       const ifuUrl = files.photo_ifu ? await uploadFile(files.photo_ifu, "ifu") : null;
       const atelierUrl = files.photo_atelier ? await uploadFile(files.photo_atelier, "atelier") : null;
 
-      // 3. Création du profil et prestataire
       await supabase.from("profiles").insert({
         id: userId,
         email: form.email,
@@ -126,8 +123,7 @@ export default function RegisterArtisanScreen() {
       });
 
       if (prestError) throw prestError;
-
-      setStep(4); // Succès
+      setStep(4);
     } catch (err: any) {
       setError(err.message);
     } finally {
@@ -136,84 +132,132 @@ export default function RegisterArtisanScreen() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col bg-gray-50">
-      <header className="flex items-center gap-3 bg-white px-4 py-4 shadow-sm">
-        <button onClick={() => step > 1 && step < 4 ? setStep(step - 1) : navigate("/register")} className="rounded-full p-1.5 text-gray-600 transition-all active:bg-gray-100">
-          <ArrowLeft className="h-5 w-5" />
+    <div className="flex min-h-screen flex-col bg-[#0F0F0E] text-white">
+      <header className="flex items-center justify-between px-6 py-6">
+        <button onClick={() => step > 1 && step < 4 ? setStep(step - 1) : navigate("/register")} className="text-zinc-400">
+          <ArrowLeft className="h-6 w-6" />
         </button>
-        <h1 className="text-lg font-bold text-gray-900">Devenir Dépanneur</h1>
+        <h1 className="text-xl font-black uppercase tracking-tight">Inscription Artisan</h1>
+        <button onClick={() => navigate("/")} className="text-zinc-400">
+          <X className="h-6 w-6" />
+        </button>
       </header>
 
-      <main className="flex-1 px-5 py-6">
+      <main className="flex-1 px-8 py-4">
         {step < 4 && (
-          <div className="mb-6 flex justify-between">
+          <div className="mb-10 flex justify-between gap-2">
             {[1, 2, 3].map((s) => (
-              <div key={s} className={`h-1.5 w-[30%] rounded-full ${step >= s ? "bg-blue-600" : "bg-gray-200"}`} />
+              <div key={s} className={`h-1 flex-1 rounded-full transition-all duration-500 ${step >= s ? "bg-[#FFFF00]" : "bg-zinc-800"}`} />
             ))}
           </div>
         )}
 
-        {error && <div className="mb-4 rounded-xl bg-red-50 p-3 text-sm text-red-700">{error}</div>}
+        {error && (
+          <div className="mb-6 rounded-xl border border-red-900/50 bg-red-900/10 p-4 text-xs font-bold uppercase tracking-widest text-red-500">
+            {error}
+          </div>
+        )}
 
         {step === 1 && (
-          <div className="space-y-4">
-            <h2 className="text-xl font-bold">Identité</h2>
-            <input name="fullName" placeholder="Nom complet" value={form.fullName} onChange={handleChange} className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm outline-none" />
-            <input name="email" type="email" placeholder="Email professionnel" value={form.email} onChange={handleChange} className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm outline-none" />
-            <input name="password" type="password" placeholder="Mot de passe" value={form.password} onChange={handleChange} className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm outline-none" />
-            <input name="telephone" placeholder="Téléphone principal" value={form.telephone} onChange={handleChange} className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm outline-none" />
-            <button onClick={() => setStep(2)} className="w-full rounded-xl bg-blue-600 py-4 text-sm font-bold text-white shadow-lg">SUIVANT</button>
+          <div className="space-y-6">
+            <div className="mb-8">
+                <h2 className="text-2xl font-black">Identité</h2>
+                <p className="text-zinc-500 text-xs font-bold uppercase tracking-widest mt-1">Étape 1 sur 3</p>
+            </div>
+
+            <div className="space-y-4">
+                <div>
+                    <label className="mb-2 block text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Nom complet</label>
+                    <input name="fullName" placeholder="Ex: Koffi AKODO" value={form.fullName} onChange={handleChange} className="w-full rounded-2xl border border-zinc-800 bg-[#1C1C1A] px-5 py-4 text-sm font-medium outline-none focus:border-[#FFFF00]" />
+                </div>
+                <div>
+                    <label className="mb-2 block text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Email professionnel</label>
+                    <input name="email" type="email" placeholder="votre@email.com" value={form.email} onChange={handleChange} className="w-full rounded-2xl border border-zinc-800 bg-[#1C1C1A] px-5 py-4 text-sm font-medium outline-none focus:border-[#FFFF00]" />
+                </div>
+                <div>
+                    <label className="mb-2 block text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Mot de passe</label>
+                    <input name="password" type="password" placeholder="••••••••" value={form.password} onChange={handleChange} className="w-full rounded-2xl border border-zinc-800 bg-[#1C1C1A] px-5 py-4 text-sm font-medium outline-none focus:border-[#FFFF00]" />
+                </div>
+                <div>
+                    <label className="mb-2 block text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Téléphone</label>
+                    <input name="telephone" placeholder="+229 XX XX XX XX" value={form.telephone} onChange={handleChange} className="w-full rounded-2xl border border-zinc-800 bg-[#1C1C1A] px-5 py-4 text-sm font-medium outline-none focus:border-[#FFFF00]" />
+                </div>
+            </div>
+
+            <button onClick={() => setStep(2)} className="mt-4 w-full rounded-2xl bg-[#FFFF00] py-4 text-sm font-black uppercase tracking-widest text-black shadow-xl shadow-[#FFFF00]/10 transition-all active:scale-[0.98]">SUIVANT</button>
           </div>
         )}
 
         {step === 2 && (
-          <div className="space-y-4">
-            <h2 className="text-xl font-bold">Activité & Service</h2>
-            <input name="nomAtelier" placeholder="Nom de l'atelier (ou 'Indépendant')" value={form.nomAtelier} onChange={handleChange} className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm outline-none" />
-
-            <div className="flex items-center gap-2 px-1">
-              <input type="checkbox" id="is_mobile" className="h-4 w-4 rounded border-gray-300 text-blue-600" />
-              <label htmlFor="is_mobile" className="text-sm text-gray-600 font-medium">Je suis un dépanneur mobile (sans atelier fixe)</label>
+          <div className="space-y-6">
+            <div className="mb-8">
+                <h2 className="text-2xl font-black">Activité</h2>
+                <p className="text-zinc-500 text-xs font-bold uppercase tracking-widest mt-1">Étape 2 sur 3</p>
             </div>
 
-            <select name="typeService" value={form.typeService} onChange={handleChange} className="w-full rounded-xl border border-gray-300 bg-white px-4 py-3 text-sm outline-none">
-              <option value="">Spécialité principale</option>
-              {typesService.map(t => <option key={t} value={t}>{t}</option>)}
-            </select>
-            <div className="flex gap-2">
-              <input name="latitude" placeholder="Latitude" value={form.latitude} readOnly className="flex-1 rounded-xl border border-gray-300 bg-gray-50 px-4 py-3 text-sm outline-none" />
-              <button onClick={getLocation} className="rounded-xl bg-gray-100 px-4 py-3 text-xs font-bold text-gray-600">GPS</button>
+            <div className="space-y-4">
+                <div>
+                    <label className="mb-2 block text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Nom de l'atelier</label>
+                    <input name="nomAtelier" placeholder="Ex: Garage du Progrès" value={form.nomAtelier} onChange={handleChange} className="w-full rounded-2xl border border-zinc-800 bg-[#1C1C1A] px-5 py-4 text-sm font-medium outline-none focus:border-[#FFFF00]" />
+                </div>
+
+                <div>
+                    <label className="mb-2 block text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Spécialité</label>
+                    <select name="typeService" value={form.typeService} onChange={handleChange} className="w-full rounded-2xl border border-zinc-800 bg-[#1C1C1A] px-5 py-4 text-sm font-medium outline-none focus:border-[#FFFF00]">
+                        <option value="">Choisir...</option>
+                        {typesService.map(t => <option key={t} value={t}>{t}</option>)}
+                    </select>
+                </div>
+
+                <div>
+                    <label className="mb-2 block text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Localisation GPS</label>
+                    <div className="flex gap-2">
+                        <input name="latitude" placeholder="Latitude" value={form.latitude} readOnly className="flex-1 rounded-2xl border border-zinc-800 bg-[#1C1C1A]/50 px-5 py-4 text-xs font-mono text-zinc-500 outline-none" />
+                        <button onClick={getLocation} className="rounded-2xl bg-zinc-800 px-6 py-4 text-[10px] font-black uppercase tracking-widest text-[#FFFF00] border border-zinc-700">GPS</button>
+                    </div>
+                </div>
             </div>
-            <button onClick={() => setStep(3)} className="w-full rounded-xl bg-blue-600 py-4 text-sm font-bold text-white shadow-lg">SUIVANT</button>
+
+            <button onClick={() => setStep(3)} className="mt-4 w-full rounded-2xl bg-[#FFFF00] py-4 text-sm font-black uppercase tracking-widest text-black shadow-xl shadow-[#FFFF00]/10 transition-all active:scale-[0.98]">SUIVANT</button>
           </div>
         )}
 
         {step === 3 && (
-          <div className="space-y-4">
-            <h2 className="text-xl font-bold">Documents KYC</h2>
-            {["photo_cip", "photo_cnib", "photo_ifu", "photo_atelier"].map(doc => (
-              <label key={doc} className="flex cursor-pointer items-center justify-between rounded-xl border border-dashed border-gray-300 p-4 bg-white">
-                <span className="text-sm font-medium text-gray-500 uppercase">{doc.replace("photo_", "")}</span>
-                {files[doc] ? <CheckCircle className="h-5 w-5 text-emerald-500" /> : <Upload className="h-5 w-5 text-gray-400" />}
-                <input type="file" className="hidden" onChange={(e) => handleFileChange(doc, e)} />
-              </label>
-            ))}
-            <button onClick={handleSubmit} disabled={loading} className="w-full rounded-xl bg-blue-600 py-4 text-sm font-bold text-white shadow-lg disabled:opacity-50">
+          <div className="space-y-6 pb-10">
+            <div className="mb-8">
+                <h2 className="text-2xl font-black">Documents</h2>
+                <p className="text-zinc-500 text-xs font-bold uppercase tracking-widest mt-1">Étape finale (KYC)</p>
+            </div>
+
+            <div className="grid grid-cols-1 gap-4">
+                {["photo_cip", "photo_cnib", "photo_ifu", "photo_atelier"].map(doc => (
+                <label key={doc} className={`flex cursor-pointer items-center justify-between rounded-2xl border-2 border-dashed p-6 transition-all ${files[doc] ? "border-[#FFFF00] bg-[#FFFF00]/5" : "border-zinc-800 bg-[#1C1C1A]"}`}>
+                    <div className="flex flex-col">
+                        <span className="text-[10px] font-black uppercase tracking-widest text-zinc-500">{doc.replace("photo_", "")}</span>
+                        <span className="text-[8px] text-zinc-600 mt-1 uppercase">Format PNG/JPG</span>
+                    </div>
+                    {files[doc] ? <CheckCircle className="h-6 w-6 text-[#FFFF00]" /> : <Upload className="h-6 w-6 text-zinc-700" />}
+                    <input type="file" className="hidden" onChange={(e) => handleFileChange(doc, e)} />
+                </label>
+                ))}
+            </div>
+
+            <button onClick={handleSubmit} disabled={loading} className="mt-4 w-full rounded-2xl bg-[#FFFF00] py-5 text-sm font-black uppercase tracking-[0.2em] text-black shadow-2xl shadow-[#FFFF00]/20 disabled:opacity-50 transition-all active:scale-[0.98]">
               {loading ? "ENVOI EN COURS..." : "SOUMETTRE MON DOSSIER"}
             </button>
           </div>
         )}
 
         {step === 4 && (
-          <div className="flex flex-col items-center justify-center py-10 text-center">
-            <div className="mb-6 flex h-24 w-24 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
-              <CheckCircle className="h-12 w-12" />
+          <div className="flex flex-col items-center justify-center py-10 text-center animate-fade-in">
+            <div className="mb-8 flex h-28 w-28 items-center justify-center rounded-full bg-[#FFFF00] shadow-[0_0_40px_rgba(255,255,0,0.2)]">
+              <CheckCircle className="h-14 w-14 text-black" strokeWidth={3} />
             </div>
-            <h2 className="text-2xl font-bold text-gray-900">Dossier reçu !</h2>
-            <p className="mt-4 px-4 text-sm text-gray-500 leading-relaxed">
-              Votre inscription a été transmise avec succès. Nos administrateurs vont vérifier vos documents sous 24h à 48h. Vous recevrez une notification par email dès que votre compte sera validé.
+            <h2 className="text-3xl font-black">Dossier reçu !</h2>
+            <p className="mt-6 px-4 text-sm font-medium text-zinc-500 leading-relaxed uppercase tracking-widest">
+              Vérification en cours sous 24h.
             </p>
-            <button onClick={() => navigate("/login")} className="mt-8 w-full rounded-xl border-2 border-blue-600 py-4 text-sm font-bold text-blue-600">RETOUR À LA CONNEXION</button>
+            <button onClick={() => navigate("/login")} className="mt-12 w-full rounded-2xl border border-zinc-800 bg-[#1C1C1A] py-5 text-xs font-black uppercase tracking-widest text-zinc-400">RETOUR À LA CONNEXION</button>
           </div>
         )}
       </main>
