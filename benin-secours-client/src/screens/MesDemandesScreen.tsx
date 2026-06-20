@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, AlertCircle, Clock, XCircle, Wrench, Car } from "lucide-react";
+import { ArrowLeft, AlertCircle, Clock, XCircle, Wrench, Car, CheckCircle2 } from "lucide-react";
 import { getMesDemandes } from "@/services/supabase_service";
 import { useAuth } from "@/context/AuthContext";
 import type { Demande } from "@/types";
