@@ -7,7 +7,7 @@ import { useAuth } from "@/context/AuthContext";
 export default function LoginScreen() {
   const navigate = useNavigate();
   const { refreshProfile } = useAuth();
-  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -19,7 +19,7 @@ export default function LoginScreen() {
     setError("");
 
     try {
-      await signIn(email, password);
+      await signIn(phone, password);
       const profile = await refreshProfile() as any;
       if (profile?.role === "prestataire") {
         navigate("/artisan-dashboard");
@@ -28,15 +28,20 @@ export default function LoginScreen() {
       }
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "Erreur de connexion";
-      setError(message);
+      setError(message === "Invalid login credentials" ? "Numéro ou mot de passe incorrect" : message);
     } finally {
       setLoading(false);
     }
   };
 
+  const inputStyle = {
+    backgroundColor: "#1C1C1A",
+    color: "#FFFFFF",
+    borderColor: "#2D2D2A"
+  };
+
   return (
     <div className="flex min-h-screen flex-col bg-[#0F0F0E] text-white overflow-hidden relative">
-      {/* Background Image Effect */}
       <div className="absolute top-0 left-0 w-full h-1/2 opacity-20 pointer-events-none">
           <div className="absolute inset-0 bg-gradient-to-b from-transparent to-[#0F0F0E] z-10"></div>
           <img
@@ -50,15 +55,14 @@ export default function LoginScreen() {
         <button onClick={() => navigate("/")} className="text-zinc-400">
           <ArrowLeft className="h-6 w-6" />
         </button>
-        <h1 className="text-xl font-black uppercase tracking-[0.25em]">BENIN-<span className="text-[#FFFF00]">SECOURS</span></h1>
+        <h1 className="text-xl font-black uppercase tracking-widest text-[#FFFF00]">BENIN-SECOURS</h1>
         <button onClick={() => navigate("/")} className="text-zinc-400">
           <X className="h-6 w-6" />
         </button>
       </header>
 
-      <main className="relative z-20 flex-1 px-8 pt-4 pb-12 overflow-y-auto text-center">
-        <div className="flex flex-col items-center mb-10">
-          {/* Yellow Logo Square */}
+      <main className="relative z-20 flex-1 px-8 pt-4 pb-12 overflow-y-auto">
+        <div className="flex flex-col items-center mb-10 text-center">
           <div className="flex h-24 w-24 items-center justify-center rounded-3xl bg-[#FFFF00] shadow-xl mb-8">
             <div className="relative">
                 <Wrench className="h-10 w-10 text-black" />
@@ -66,7 +70,7 @@ export default function LoginScreen() {
             </div>
           </div>
           <h2 className="text-4xl font-black tracking-tight">Bienvenue</h2>
-          <p className="mt-2 text-zinc-500 font-medium tracking-wide uppercase text-[10px]">Identifiez-vous pour continuer</p>
+          <p className="mt-2 text-zinc-500 font-medium tracking-wide uppercase text-[10px]">Identifiez-vous avec votre numéro</p>
         </div>
 
         {error && (
@@ -75,18 +79,19 @@ export default function LoginScreen() {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-6 text-left">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
             <label className="block text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 ml-1">
-              Adresse e-mail
+              Numéro de téléphone
             </label>
             <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              type="tel"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
               required
-              className="w-full rounded-2xl border border-zinc-800 bg-[#1C1C1A] px-5 py-4 text-sm font-medium text-white !text-white outline-none transition-all focus:border-[#FFFF00]"
-              placeholder="nom@exemple.com"
+              style={inputStyle}
+              className="w-full rounded-2xl border px-6 py-5 text-sm font-medium outline-none transition-all focus:border-[#FFFF00]"
+              placeholder="Ex: 97000000"
             />
           </div>
 
@@ -100,7 +105,8 @@ export default function LoginScreen() {
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full rounded-2xl border border-zinc-800 bg-[#1C1C1A] px-5 py-4 text-sm font-medium text-white !text-white outline-none transition-all focus:border-[#FFFF00]"
+                style={inputStyle}
+                className="w-full rounded-2xl border px-6 py-5 text-sm font-medium outline-none transition-all focus:border-[#FFFF00]"
                 placeholder="Entrez votre mot de passe"
               />
               <button
@@ -118,20 +124,18 @@ export default function LoginScreen() {
             disabled={loading}
             className="mt-4 w-full rounded-full bg-[#FFFF00] py-5 text-sm font-black uppercase tracking-[0.2em] text-black shadow-xl shadow-[#FFFF00]/10 transition-all active:scale-[0.98] disabled:opacity-50"
           >
-            {loading ? "Connexion..." : "Se connecter"}
+            {loading ? "Chargement..." : "Se connecter"}
           </button>
         </form>
 
-        <div className="mt-10 flex flex-col items-center gap-4">
+        <div className="mt-12 flex flex-col items-center gap-4 text-center">
             <p className="text-[10px] font-black uppercase tracking-[0.1em] text-zinc-600">
                 Pas de compte ?{" "}
                 <button onClick={() => navigate("/register")} className="text-[#FFFF00]">
                     S&apos;inscrire
                 </button>
             </p>
-
-            <div className="mt-10 h-1 w-12 rounded-full bg-zinc-800"></div>
-            <p className="text-[8px] font-black uppercase tracking-[0.5em] text-zinc-800">Bénin Secours © 2024</p>
+            <p className="text-[8px] font-black uppercase tracking-[0.5em] text-zinc-800 mt-10">Bénin Secours © 2024</p>
         </div>
       </main>
     </div>

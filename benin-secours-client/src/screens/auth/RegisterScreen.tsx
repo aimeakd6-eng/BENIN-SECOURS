@@ -11,7 +11,6 @@ export default function RegisterScreen() {
   const [form, setForm] = useState({
     fullName: "",
     telephone: "",
-    email: "",
     password: "",
     confirmPassword: "",
   });
@@ -30,13 +29,18 @@ export default function RegisterScreen() {
       setError("Les mots de passe ne correspondent pas");
       return;
     }
+    if (form.password.length < 6) {
+      setError("Le mot de passe doit contenir au moins 6 caractères");
+      return;
+    }
     setLoading(true);
     try {
-      await signUp(form.email, form.password, form.fullName, form.telephone);
+      await signUp(form.telephone, form.password, form.fullName);
       await refreshProfile();
       navigate("/");
     } catch (err: unknown) {
-      setError(err instanceof Error ? err.message : "Erreur d'inscription");
+      const message = err instanceof Error ? err.message : "Erreur d'inscription";
+      setError(message);
     } finally {
       setLoading(false);
     }
@@ -88,30 +92,30 @@ export default function RegisterScreen() {
         </div>
 
         {error && (
-          <div className="mb-6 rounded-xl border border-red-900/50 bg-red-900/10 p-4 text-xs font-bold text-red-500 uppercase tracking-widest">{error}</div>
+          <div className="mb-6 rounded-xl border border-red-900/50 bg-red-900/10 p-4 text-xs font-bold uppercase tracking-widest text-red-500">{error}</div>
         )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="mb-2 block text-[10px] font-black uppercase text-zinc-500">Nom Complet</label>
-            <input name="fullName" value={form.fullName} onChange={handleChange} required style={inputStyle} className="w-full rounded-2xl border px-5 py-4 text-sm outline-none focus:border-[#FFFF00]" />
+            <input name="fullName" value={form.fullName} onChange={handleChange} required style={inputStyle} className="w-full rounded-2xl border px-5 py-4 text-sm outline-none focus:border-[#FFFF00]" placeholder="Ex: Koffi AKODO" />
           </div>
           <div>
-            <label className="mb-2 block text-[10px] font-black uppercase text-zinc-500">Téléphone</label>
-            <input name="telephone" value={form.telephone} onChange={handleChange} required style={inputStyle} className="w-full rounded-2xl border px-5 py-4 text-sm outline-none focus:border-[#FFFF00]" />
-          </div>
-          <div>
-            <label className="mb-2 block text-[10px] font-black uppercase text-zinc-500">Adresse Email</label>
-            <input name="email" type="email" value={form.email} onChange={handleChange} required style={inputStyle} className="w-full rounded-2xl border px-5 py-4 text-sm outline-none focus:border-[#FFFF00]" />
+            <label className="mb-2 block text-[10px] font-black uppercase text-zinc-500">Numéro de téléphone</label>
+            <input name="telephone" type="tel" value={form.telephone} onChange={handleChange} required style={inputStyle} className="w-full rounded-2xl border px-5 py-4 text-sm outline-none focus:border-[#FFFF00]" placeholder="Ex: 97000000" />
           </div>
           <div>
             <label className="mb-2 block text-[10px] font-black uppercase text-zinc-500">Mot de passe</label>
             <div className="relative">
-              <input name="password" type={showPassword ? "text" : "password"} value={form.password} onChange={handleChange} required style={inputStyle} className="w-full rounded-2xl border px-5 py-4 text-sm outline-none focus:border-[#FFFF00]" />
+              <input name="password" type={showPassword ? "text" : "password"} value={form.password} onChange={handleChange} required style={inputStyle} className="w-full rounded-2xl border px-5 py-4 text-sm outline-none focus:border-[#FFFF00]" placeholder="Minimum 6 caractères" />
               <button type="button" onClick={() => setShowPassword(!showPassword)} className="absolute right-4 top-1/2 -translate-y-1/2 text-zinc-500">
                 {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
               </button>
             </div>
+          </div>
+          <div>
+            <label className="mb-2 block text-[10px] font-black uppercase text-zinc-500">Confirmer</label>
+            <input name="confirmPassword" type="password" value={form.confirmPassword} onChange={handleChange} required style={inputStyle} className="w-full rounded-2xl border px-5 py-4 text-sm outline-none focus:border-[#FFFF00]" placeholder="••••••••" />
           </div>
 
           <button type="submit" disabled={loading}

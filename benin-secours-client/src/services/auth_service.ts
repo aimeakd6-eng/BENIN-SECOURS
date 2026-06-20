@@ -1,7 +1,16 @@
 import { supabase } from "@/config/supabase";
 import type { Profile } from "@/types";
 
-export async function signIn(email: string, password: string) {
+// Fonction pour transformer un numéro en faux email pour Supabase
+const phoneToEmail = (phone: string) => {
+  const cleanPhone = phone.replace(/\s/g, "").replace(/\+/g, "");
+  return `${cleanPhone}@benin.bj`;
+};
+
+export async function signIn(phone: string, password: string) {
+  // On utilise l'email généré à partir du téléphone
+  const email = phone.includes("@") ? phone : phoneToEmail(phone);
+
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
@@ -12,18 +21,19 @@ export async function signIn(email: string, password: string) {
 }
 
 export async function signUp(
-  email: string,
+  phone: string,
   password: string,
   fullName: string,
-  telephone: string
 ) {
+  const email = phoneToEmail(phone);
+
   const { data: authData, error: authError } = await supabase.auth.signUp({
     email,
     password,
     options: {
       data: {
         full_name: fullName,
-        telephone: telephone,
+        telephone: phone,
         role: "client",
       },
     },
@@ -36,7 +46,7 @@ export async function signUp(
       id: authData.user.id,
       email,
       full_name: fullName,
-      telephone,
+      telephone: phone,
       role: "client",
     });
   }
