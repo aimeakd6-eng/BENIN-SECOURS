@@ -131,13 +131,19 @@ export default function RegisterArtisanScreen() {
     }
   };
 
+  const inputStyle = {
+    backgroundColor: "#1C1C1A",
+    color: "#FFFFFF",
+    borderColor: "#2D2D2A"
+  };
+
   return (
     <div className="flex min-h-screen flex-col bg-[#0F0F0E] text-white">
       <header className="flex items-center justify-between px-6 py-6">
         <button onClick={() => step > 1 && step < 4 ? setStep(step - 1) : navigate("/register")} className="text-zinc-400">
           <ArrowLeft className="h-6 w-6" />
         </button>
-        <h1 className="text-xl font-black uppercase tracking-tight">Inscription Artisan</h1>
+        <h1 className="text-xl font-black uppercase tracking-widest text-[#FFFF00]">BENIN-SECOURS</h1>
         <button onClick={() => navigate("/")} className="text-zinc-400">
           <X className="h-6 w-6" />
         </button>
@@ -161,49 +167,49 @@ export default function RegisterArtisanScreen() {
         {step === 1 && (
           <div className="space-y-6">
             <div className="mb-8">
-                <h2 className="text-2xl font-black">Identité</h2>
-                <p className="text-zinc-500 text-xs font-bold uppercase tracking-widest mt-1">Étape 1 sur 3</p>
+                <h2 className="text-2xl font-black uppercase tracking-tight">Identité</h2>
+                <p className="text-zinc-500 text-[10px] font-bold uppercase tracking-widest mt-1">Étape 1 sur 3</p>
             </div>
 
             <div className="space-y-4">
                 <div>
                     <label className="mb-2 block text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Nom complet</label>
-                    <input name="fullName" placeholder="Ex: Koffi AKODO" value={form.fullName} onChange={handleChange} className="w-full rounded-2xl border border-zinc-800 bg-[#1C1C1A] px-5 py-4 text-sm font-medium outline-none focus:border-[#FFFF00]" />
+                    <input name="fullName" placeholder="Ex: Koffi AKODO" value={form.fullName} onChange={handleChange} style={inputStyle} className="w-full rounded-2xl border px-5 py-4 text-sm font-medium outline-none focus:border-[#FFFF00]" />
                 </div>
                 <div>
                     <label className="mb-2 block text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Email professionnel</label>
-                    <input name="email" type="email" placeholder="votre@email.com" value={form.email} onChange={handleChange} className="w-full rounded-2xl border border-zinc-800 bg-[#1C1C1A] px-5 py-4 text-sm font-medium outline-none focus:border-[#FFFF00]" />
+                    <input name="email" type="email" placeholder="votre@email.com" value={form.email} onChange={handleChange} style={inputStyle} className="w-full rounded-2xl border px-5 py-4 text-sm font-medium outline-none focus:border-[#FFFF00]" />
                 </div>
                 <div>
                     <label className="mb-2 block text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Mot de passe</label>
-                    <input name="password" type="password" placeholder="••••••••" value={form.password} onChange={handleChange} className="w-full rounded-2xl border border-zinc-800 bg-[#1C1C1A] px-5 py-4 text-sm font-medium outline-none focus:border-[#FFFF00]" />
+                    <input name="password" type="password" placeholder="••••••••" value={form.password} onChange={handleChange} style={inputStyle} className="w-full rounded-2xl border px-5 py-4 text-sm font-medium outline-none focus:border-[#FFFF00]" />
                 </div>
                 <div>
                     <label className="mb-2 block text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Téléphone</label>
-                    <input name="telephone" placeholder="+229 XX XX XX XX" value={form.telephone} onChange={handleChange} className="w-full rounded-2xl border border-zinc-800 bg-[#1C1C1A] px-5 py-4 text-sm font-medium outline-none focus:border-[#FFFF00]" />
+                    <input name="telephone" placeholder="+229 XX XX XX XX" value={form.telephone} onChange={handleChange} style={inputStyle} className="w-full rounded-2xl border px-5 py-4 text-sm font-medium outline-none focus:border-[#FFFF00]" />
                 </div>
             </div>
 
-            <button onClick={() => setStep(2)} className="mt-4 w-full rounded-2xl bg-[#FFFF00] py-4 text-sm font-black uppercase tracking-widest text-black shadow-xl shadow-[#FFFF00]/10 transition-all active:scale-[0.98]">SUIVANT</button>
+            <button onClick={() => setStep(2)} className="mt-4 w-full rounded-full bg-[#FFFF00] py-4 text-sm font-black uppercase tracking-widest text-black shadow-xl shadow-[#FFFF00]/10 transition-all active:scale-[0.98]">SUIVANT</button>
           </div>
         )}
 
         {step === 2 && (
           <div className="space-y-6">
             <div className="mb-8">
-                <h2 className="text-2xl font-black">Activité</h2>
-                <p className="text-zinc-500 text-xs font-bold uppercase tracking-widest mt-1">Étape 2 sur 3</p>
+                <h2 className="text-2xl font-black uppercase tracking-tight">Activité</h2>
+                <p className="text-zinc-500 text-[10px] font-bold uppercase tracking-widest mt-1">Étape 2 sur 3</p>
             </div>
 
             <div className="space-y-4">
                 <div>
                     <label className="mb-2 block text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Nom de l'atelier</label>
-                    <input name="nomAtelier" placeholder="Ex: Garage du Progrès" value={form.nomAtelier} onChange={handleChange} className="w-full rounded-2xl border border-zinc-800 bg-[#1C1C1A] px-5 py-4 text-sm font-medium outline-none focus:border-[#FFFF00]" />
+                    <input name="nomAtelier" placeholder="Ex: Garage du Progrès" value={form.nomAtelier} onChange={handleChange} style={inputStyle} className="w-full rounded-2xl border px-5 py-4 text-sm font-medium outline-none focus:border-[#FFFF00]" />
                 </div>
 
                 <div>
                     <label className="mb-2 block text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Spécialité</label>
-                    <select name="typeService" value={form.typeService} onChange={handleChange} className="w-full rounded-2xl border border-zinc-800 bg-[#1C1C1A] px-5 py-4 text-sm font-medium outline-none focus:border-[#FFFF00]">
+                    <select name="typeService" value={form.typeService} onChange={handleChange} style={inputStyle} className="w-full rounded-2xl border px-5 py-4 text-sm font-medium outline-none focus:border-[#FFFF00]">
                         <option value="">Choisir...</option>
                         {typesService.map(t => <option key={t} value={t}>{t}</option>)}
                     </select>
@@ -212,21 +218,21 @@ export default function RegisterArtisanScreen() {
                 <div>
                     <label className="mb-2 block text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Localisation GPS</label>
                     <div className="flex gap-2">
-                        <input name="latitude" placeholder="Latitude" value={form.latitude} readOnly className="flex-1 rounded-2xl border border-zinc-800 bg-[#1C1C1A]/50 px-5 py-4 text-xs font-mono text-zinc-500 outline-none" />
+                        <input name="latitude" placeholder="Latitude" value={form.latitude} readOnly style={inputStyle} className="flex-1 rounded-2xl border px-5 py-4 text-xs font-mono outline-none" />
                         <button onClick={getLocation} className="rounded-2xl bg-zinc-800 px-6 py-4 text-[10px] font-black uppercase tracking-widest text-[#FFFF00] border border-zinc-700">GPS</button>
                     </div>
                 </div>
             </div>
 
-            <button onClick={() => setStep(3)} className="mt-4 w-full rounded-2xl bg-[#FFFF00] py-4 text-sm font-black uppercase tracking-widest text-black shadow-xl shadow-[#FFFF00]/10 transition-all active:scale-[0.98]">SUIVANT</button>
+            <button onClick={() => setStep(3)} className="mt-4 w-full rounded-full bg-[#FFFF00] py-4 text-sm font-black uppercase tracking-widest text-black shadow-xl shadow-[#FFFF00]/10 transition-all active:scale-[0.98]">SUIVANT</button>
           </div>
         )}
 
         {step === 3 && (
           <div className="space-y-6 pb-10">
             <div className="mb-8">
-                <h2 className="text-2xl font-black">Documents</h2>
-                <p className="text-zinc-500 text-xs font-bold uppercase tracking-widest mt-1">Étape finale (KYC)</p>
+                <h2 className="text-2xl font-black uppercase tracking-tight">Documents</h2>
+                <p className="text-zinc-500 text-[10px] font-bold uppercase tracking-widest mt-1">Étape finale (KYC)</p>
             </div>
 
             <div className="grid grid-cols-1 gap-4">
@@ -242,8 +248,8 @@ export default function RegisterArtisanScreen() {
                 ))}
             </div>
 
-            <button onClick={handleSubmit} disabled={loading} className="mt-4 w-full rounded-2xl bg-[#FFFF00] py-5 text-sm font-black uppercase tracking-[0.2em] text-black shadow-2xl shadow-[#FFFF00]/20 disabled:opacity-50 transition-all active:scale-[0.98]">
-              {loading ? "ENVOI EN COURS..." : "SOUMETTRE MON DOSSIER"}
+            <button onClick={handleSubmit} disabled={loading} className="mt-4 w-full rounded-full bg-[#FFFF00] py-5 text-sm font-black uppercase tracking-[0.2em] text-black shadow-2xl shadow-[#FFFF00]/20 disabled:opacity-50 transition-all active:scale-[0.98]">
+              {loading ? "ENVOI EN COURS..." : "SOUMETTRE DOSSIER"}
             </button>
           </div>
         )}
@@ -253,11 +259,11 @@ export default function RegisterArtisanScreen() {
             <div className="mb-8 flex h-28 w-28 items-center justify-center rounded-full bg-[#FFFF00] shadow-[0_0_40px_rgba(255,255,0,0.2)]">
               <CheckCircle className="h-14 w-14 text-black" strokeWidth={3} />
             </div>
-            <h2 className="text-3xl font-black">Dossier reçu !</h2>
+            <h2 className="text-3xl font-black uppercase tracking-tight">Dossier reçu !</h2>
             <p className="mt-6 px-4 text-sm font-medium text-zinc-500 leading-relaxed uppercase tracking-widest">
               Vérification en cours sous 24h.
             </p>
-            <button onClick={() => navigate("/login")} className="mt-12 w-full rounded-2xl border border-zinc-800 bg-[#1C1C1A] py-5 text-xs font-black uppercase tracking-widest text-zinc-400">RETOUR À LA CONNEXION</button>
+            <button onClick={() => navigate("/login")} className="mt-12 w-full rounded-full bg-zinc-800 py-5 text-xs font-black uppercase tracking-widest text-zinc-400">RETOUR À LA CONNEXION</button>
           </div>
         )}
       </main>

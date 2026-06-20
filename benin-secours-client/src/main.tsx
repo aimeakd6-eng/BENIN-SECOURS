@@ -1,4 +1,4 @@
-// Version 1.0.1 - BENIN-SECOURS
+// Version 1.0.2 - BENIN-SECOURS
 import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
