@@ -2,8 +2,15 @@ import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   ArrowLeft, Phone, MessageCircle, MapPin, Clock, Star,
-  XCircle, AlertTriangle, CheckCircle2, CreditCard, Navigation
+  XCircle, AlertTriangle, CheckCircle2, CreditCard
 } from "lucide-react";
+
+declare global {
+  interface Window {
+    openKkiapayWidget: any;
+    addKkiapayListener: any;
+  }
+}
 import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import L from "leaflet";
 import { annulerDemande } from "@/services/supabase_service";

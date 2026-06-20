@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { Shield, User, History, Phone, Settings, CreditCard, HelpCircle, FileText, LogOut, ChevronRight, X, Trash2, Bell } from "lucide-react";
+import { Shield, User, History, Phone, Settings, ChevronRight, X, Wrench, Car } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { signOut } from "@/services/auth_service";
 

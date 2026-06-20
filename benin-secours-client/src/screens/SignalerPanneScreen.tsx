@@ -1,15 +1,12 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, MapPin, AlertTriangle, Navigation, MessageCircle } from "lucide-react";
+import { ArrowLeft, MapPin, XCircle } from "lucide-react";
 import { getCurrentPosition } from "@/services/location_service";
 import { useDemande } from "@/context/DemandeContext";
 import { TYPES_PANNE } from "@/types";
-import TypePanneTile from "@/components/TypePanneTile";
-import LoadingWidget from "@/components/LoadingWidget";
 
 import { MapContainer, TileLayer, Marker } from "react-leaflet";
 import L from "leaflet";
-import { XCircle } from "lucide-react";
 
 const userIcon = L.divIcon({
   className: "user-location-marker",

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, MapPin, AlertCircle, Radio, List, Map as MapIcon } from "lucide-react";
+import { ArrowLeft, AlertCircle, List, XCircle, Wrench, Car } from "lucide-react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import { getPrestatairesProches } from "@/services/supabase_service";

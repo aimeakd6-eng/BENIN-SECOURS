@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { ArrowLeft, Star, CheckCircle2 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { creerAvis } from "@/services/supabase_service";
+import { supabase } from "@/config/supabase";
 import EtoilesWidget from "@/components/EtoilesWidget";
 
 export default function NotationScreen() {

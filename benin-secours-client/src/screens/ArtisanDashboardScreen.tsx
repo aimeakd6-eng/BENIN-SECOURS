@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import {
   Shield, Wrench, Wallet, Star, Clock,
-  CheckCircle2, XCircle, Phone, MapPin,
-  Settings, LogOut, Power, ArrowRightLeft, Check
+  Phone, Settings, LogOut, Power, ArrowRightLeft, Check,
+  ArrowUpRight, ArrowDownLeft
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
 import { supabase } from "@/config/supabase";

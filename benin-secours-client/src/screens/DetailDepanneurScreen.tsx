@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   ArrowLeft, Phone, MessageCircle, MapPin, Star,
-  Navigation, CheckCircle2, AlertTriangle, CheckCircle
+  CheckCircle2, AlertTriangle, XCircle, Wrench, Shield
 } from "lucide-react";
 import { useDemande } from "@/context/DemandeContext";
 import { useAuth } from "@/context/AuthContext";
