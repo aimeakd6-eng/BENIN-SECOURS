@@ -5,6 +5,12 @@ import { supabase } from "@/config/supabase";
 
 const typesService = ["Mécanique", "Électricité", "Pneu", "Remorquage", "Vidange", "Batterie"];
 
+// Fonction pour transformer un numéro en faux email pour Supabase
+const phoneToEmail = (phone: string) => {
+  const cleanPhone = phone.replace(/\s/g, "").replace(/\+/g, "");
+  return `${cleanPhone}@benin.bj`;
+};
+
 export default function RegisterArtisanScreen() {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
@@ -13,9 +19,8 @@ export default function RegisterArtisanScreen() {
 
   const [form, setForm] = useState({
     fullName: "",
-    email: "",
-    password: "",
     telephone: "",
+    password: "",
     whatsapp: "",
     nomAtelier: "",
     typeService: "",
@@ -70,8 +75,10 @@ export default function RegisterArtisanScreen() {
     setLoading(true);
     setError("");
     try {
+      const email = phoneToEmail(form.telephone);
+
       const { data: authData, error: authError } = await supabase.auth.signUp({
-        email: form.email,
+        email: email,
         password: form.password,
         options: {
           data: {
@@ -93,7 +100,7 @@ export default function RegisterArtisanScreen() {
 
       await supabase.from("profiles").insert({
         id: userId,
-        email: form.email,
+        email: email,
         full_name: form.fullName,
         telephone: form.telephone,
         role: "prestataire"
@@ -119,7 +126,8 @@ export default function RegisterArtisanScreen() {
         est_disponible: false,
         note_moyenne: 0,
         nombre_avis: 0,
-        wallet_solde: 0
+        wallet_solde: 0,
+        updated_at: new Date().toISOString()
       });
 
       if (prestError) throw prestError;
@@ -149,7 +157,7 @@ export default function RegisterArtisanScreen() {
         </button>
       </header>
 
-      <main className="flex-1 px-8 py-4">
+      <main className="flex-1 px-8 py-4 text-center">
         {step < 4 && (
           <div className="mb-10 flex justify-between gap-2">
             {[1, 2, 3].map((s) => (
@@ -159,34 +167,30 @@ export default function RegisterArtisanScreen() {
         )}
 
         {error && (
-          <div className="mb-6 rounded-xl border border-red-900/50 bg-red-900/10 p-4 text-xs font-bold uppercase tracking-widest text-red-500">
+          <div className="mb-6 rounded-xl border border-red-900/50 bg-red-900/10 p-4 text-xs font-bold uppercase tracking-widest text-red-500 text-left">
             {error}
           </div>
         )}
 
         {step === 1 && (
           <div className="space-y-6">
-            <div className="mb-8">
+            <div className="mb-8 text-left">
                 <h2 className="text-2xl font-black uppercase tracking-tight">Identité</h2>
-                <p className="text-zinc-500 text-[10px] font-bold uppercase tracking-widest mt-1">Étape 1 sur 3</p>
+                <p className="text-zinc-500 text-[10px] font-bold uppercase mt-1">Étape 1 sur 3</p>
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-4 text-left">
                 <div>
                     <label className="mb-2 block text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Nom complet</label>
                     <input name="fullName" placeholder="Ex: Koffi AKODO" value={form.fullName} onChange={handleChange} style={inputStyle} className="w-full rounded-2xl border px-5 py-4 text-sm font-medium outline-none focus:border-[#FFFF00]" />
                 </div>
                 <div>
-                    <label className="mb-2 block text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Email professionnel</label>
-                    <input name="email" type="email" placeholder="votre@email.com" value={form.email} onChange={handleChange} style={inputStyle} className="w-full rounded-2xl border px-5 py-4 text-sm font-medium outline-none focus:border-[#FFFF00]" />
+                    <label className="mb-2 block text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Numéro de téléphone</label>
+                    <input name="telephone" placeholder="Ex: 97000000" value={form.telephone} onChange={handleChange} style={inputStyle} className="w-full rounded-2xl border px-5 py-4 text-sm font-medium outline-none focus:border-[#FFFF00]" />
                 </div>
                 <div>
                     <label className="mb-2 block text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Mot de passe</label>
                     <input name="password" type="password" placeholder="••••••••" value={form.password} onChange={handleChange} style={inputStyle} className="w-full rounded-2xl border px-5 py-4 text-sm font-medium outline-none focus:border-[#FFFF00]" />
-                </div>
-                <div>
-                    <label className="mb-2 block text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Téléphone</label>
-                    <input name="telephone" placeholder="+229 XX XX XX XX" value={form.telephone} onChange={handleChange} style={inputStyle} className="w-full rounded-2xl border px-5 py-4 text-sm font-medium outline-none focus:border-[#FFFF00]" />
                 </div>
             </div>
 
@@ -196,12 +200,12 @@ export default function RegisterArtisanScreen() {
 
         {step === 2 && (
           <div className="space-y-6">
-            <div className="mb-8">
+            <div className="mb-8 text-left">
                 <h2 className="text-2xl font-black uppercase tracking-tight">Activité</h2>
-                <p className="text-zinc-500 text-[10px] font-bold uppercase tracking-widest mt-1">Étape 2 sur 3</p>
+                <p className="text-zinc-500 text-[10px] font-bold uppercase mt-1">Étape 2 sur 3</p>
             </div>
 
-            <div className="space-y-4">
+            <div className="space-y-4 text-left">
                 <div>
                     <label className="mb-2 block text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500">Nom de l'atelier</label>
                     <input name="nomAtelier" placeholder="Ex: Garage du Progrès" value={form.nomAtelier} onChange={handleChange} style={inputStyle} className="w-full rounded-2xl border px-5 py-4 text-sm font-medium outline-none focus:border-[#FFFF00]" />
@@ -229,10 +233,10 @@ export default function RegisterArtisanScreen() {
         )}
 
         {step === 3 && (
-          <div className="space-y-6 pb-10">
+          <div className="space-y-6 pb-10 text-left">
             <div className="mb-8">
                 <h2 className="text-2xl font-black uppercase tracking-tight">Documents</h2>
-                <p className="text-zinc-500 text-[10px] font-bold uppercase tracking-widest mt-1">Étape finale (KYC)</p>
+                <p className="text-zinc-500 text-[10px] font-bold uppercase mt-1">Étape finale (KYC)</p>
             </div>
 
             <div className="grid grid-cols-1 gap-4">
