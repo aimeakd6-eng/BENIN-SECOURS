@@ -27,7 +27,7 @@ import MainLayout from "@/components/MainLayout";
 import StatCard from "@/components/StatCard";
 import { supabase } from "@/lib/supabase";
 
-const COLORS = ["#0066CC", "#10B981", "#F59E0B", "#EF4444", "#8B5CF6"];
+const COLORS = ["#FFFF00", "#10B981", "#3B82F6", "#F59E0B", "#EF4444"];
 
 export default function DashboardPage() {
   const [stats, setStats] = useState({
@@ -176,7 +176,7 @@ export default function DashboardPage() {
         <div className="card lg:col-span-2">
           <div className="mb-6 flex items-center justify-between">
             <h3 className="section-title text-xl">Activité des demandes</h3>
-            <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-medium text-blue-600">
+            <span className="rounded-full bg-primary-500/10 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-primary-500">
               Derniers 30 jours
             </span>
           </div>
@@ -185,36 +185,38 @@ export default function DashboardPage() {
               <LineChart data={chartData}>
                 <defs>
                   <linearGradient id="colorCount" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#0066CC" stopOpacity={0.1}/>
-                    <stop offset="95%" stopColor="#0066CC" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="#FFFF00" stopOpacity={0.1}/>
+                    <stop offset="95%" stopColor="#FFFF00" stopOpacity={0}/>
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f0f0f0" />
+                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#2D2D2A" />
                 <XAxis
                   dataKey="date"
                   axisLine={false}
                   tickLine={false}
-                  tick={{ fontSize: 12, fill: '#94a3b8' }}
+                  tick={{ fontSize: 10, fill: '#6B7280', fontWeight: 'bold' }}
                   dy={10}
                 />
                 <YAxis
                   axisLine={false}
                   tickLine={false}
-                  tick={{ fontSize: 12, fill: '#94a3b8' }}
+                  tick={{ fontSize: 10, fill: '#6B7280', fontWeight: 'bold' }}
                 />
                 <Tooltip
                   contentStyle={{
+                    backgroundColor: '#1C1C1A',
                     borderRadius: '12px',
-                    border: 'none',
-                    boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)'
+                    border: '1px solid #2D2D2A',
+                    boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.5)'
                   }}
+                  itemStyle={{ color: '#FFFF00' }}
                 />
                 <Line
                   type="monotone"
                   dataKey="count"
-                  stroke="#0066CC"
+                  stroke="#FFFF00"
                   strokeWidth={3}
-                  dot={{ r: 4, fill: "#0066CC", strokeWidth: 2, stroke: "#fff" }}
+                  dot={{ r: 4, fill: "#FFFF00", strokeWidth: 2, stroke: "#1C1C1A" }}
                   activeDot={{ r: 6, strokeWidth: 0 }}
                 />
               </LineChart>
@@ -246,16 +248,17 @@ export default function DashboardPage() {
                 </Pie>
                 <Tooltip
                   contentStyle={{
+                    backgroundColor: '#1C1C1A',
                     borderRadius: '12px',
-                    border: 'none',
-                    boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.1)'
+                    border: '1px solid #2D2D2A',
+                    boxShadow: '0 10px 15px -3px rgb(0 0 0 / 0.5)'
                   }}
                 />
               </PieChart>
             </ResponsiveContainer>
             <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 text-center">
-              <p className="text-3xl font-bold text-gray-900">{stats.totalPrestataires}</p>
-              <p className="text-xs font-medium text-gray-500 uppercase tracking-wider">Total</p>
+              <p className="text-3xl font-black text-white">{stats.totalPrestataires}</p>
+              <p className="text-[10px] font-black text-gray-600 uppercase tracking-widest">Total</p>
             </div>
           </div>
           <div className="mt-6 space-y-3">
@@ -265,8 +268,8 @@ export default function DashboardPage() {
                   className="h-2 w-2 rounded-full"
                   style={{ backgroundColor: COLORS[i % COLORS.length] }}
                 />
-                <span className="flex-1 text-gray-600 font-medium">{s.name}</span>
-                <span className="font-bold text-gray-900">
+                <span className="flex-1 text-gray-500 font-bold uppercase text-[10px] tracking-wider">{s.name}</span>
+                <span className="font-black text-white">
                   {Math.round((s.value / stats.totalPrestataires) * 100) || 0}%
                 </span>
               </div>
@@ -275,45 +278,45 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <div className="card flex items-center gap-4">
-          <div className="rounded-xl bg-blue-50 p-3 text-blue-600">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <div className="card flex items-center gap-4 border-l-4 border-l-blue-500">
+          <div className="rounded-xl bg-blue-500/10 p-3 text-blue-500">
             <Users className="h-6 w-6" />
           </div>
           <div>
-            <p className="text-2xl font-bold">{stats.totalClients}</p>
-            <p className="text-sm text-gray-500">Clients inscrits</p>
+            <p className="text-2xl font-black text-white">{stats.totalClients}</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-gray-600">Clients inscrits</p>
           </div>
         </div>
-        <div className="card flex items-center gap-4">
-          <div className="rounded-xl bg-emerald-50 p-3 text-emerald-600">
+        <div className="card flex items-center gap-4 border-l-4 border-l-emerald-500">
+          <div className="rounded-xl bg-emerald-500/10 p-3 text-emerald-500">
             <TrendingUp className="h-6 w-6" />
           </div>
           <div>
-            <p className="text-2xl font-bold">{stats.totalPaiements}</p>
-            <p className="text-sm text-gray-500">Paiements effectués</p>
+            <p className="text-2xl font-black text-white">{stats.totalPaiements}</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-gray-600">Paiements effectués</p>
           </div>
         </div>
-        <div className="card flex items-center gap-4">
-          <div className="rounded-xl bg-amber-50 p-3 text-amber-600">
+        <div className="card flex items-center gap-4 border-l-4 border-l-amber-500">
+          <div className="rounded-xl bg-amber-500/10 p-3 text-amber-500">
             <Star className="h-6 w-6" />
           </div>
           <div>
-            <p className="text-2xl font-bold">
+            <p className="text-2xl font-black text-white">
               {stats.totalPrestataires > 0
                 ? "4.2"
                 : "0"}
             </p>
-            <p className="text-sm text-gray-500">Note moyenne</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-gray-600">Note moyenne</p>
           </div>
         </div>
-        <div className="card flex items-center gap-4">
-          <div className="rounded-xl bg-purple-50 p-3 text-purple-600">
+        <div className="card flex items-center gap-4 border-l-4 border-l-purple-500">
+          <div className="rounded-xl bg-purple-500/10 p-3 text-purple-500">
             <MapPin className="h-6 w-6" />
           </div>
           <div>
-            <p className="text-2xl font-bold">Cotonou</p>
-            <p className="text-sm text-gray-500">Zone principale</p>
+            <p className="text-2xl font-black text-white">Cotonou</p>
+            <p className="text-[10px] font-bold uppercase tracking-widest text-gray-600">Zone principale</p>
           </div>
         </div>
       </div>

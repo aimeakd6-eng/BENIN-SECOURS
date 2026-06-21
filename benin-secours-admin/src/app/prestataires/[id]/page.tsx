@@ -24,22 +24,22 @@ import { supabase, type Prestataire } from "@/lib/supabase";
 const statutConfig = {
   en_attente: {
     label: "En attente",
-    className: "bg-amber-50 text-amber-700 border-amber-200",
+    className: "bg-amber-500/10 text-amber-500 border-amber-500/20",
     icon: Clock,
   },
   validé: {
     label: "Validé",
-    className: "bg-emerald-50 text-emerald-700 border-emerald-200",
+    className: "bg-emerald-500/10 text-emerald-500 border-emerald-500/20",
     icon: CheckCircle2,
   },
   suspendu: {
     label: "Suspendu",
-    className: "bg-red-50 text-red-700 border-red-200",
+    className: "bg-red-500/10 text-red-500 border-red-500/20",
     icon: PauseCircle,
   },
   rejeté: {
     label: "Rejeté",
-    className: "bg-gray-100 text-gray-700 border-gray-200",
+    className: "bg-gray-500/10 text-gray-500 border-gray-500/20",
     icon: XCircle,
   },
 };
@@ -174,71 +174,79 @@ export default function DetailPrestatairePage() {
     >
       <Link
         href="/prestataires"
-        className="mb-4 inline-flex items-center gap-2 text-sm text-gray-500 hover:text-primary-600"
+        className="mb-4 inline-flex items-center gap-2 text-[10px] font-black uppercase tracking-widest text-gray-500 hover:text-primary-500 transition-colors"
       >
         <ArrowLeft className="h-4 w-4" />
         Retour à la liste
       </Link>
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        <div className="lg:col-span-2 space-y-6">
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-3">
+        <div className="lg:col-span-2 space-y-8">
           <div className="card">
             <div className="flex items-start justify-between">
-              <div className="flex items-center gap-4">
-                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary-50 text-2xl font-bold text-primary-600">
+              <div className="flex items-center gap-6">
+                <div className="flex h-20 w-20 items-center justify-center rounded-3xl bg-zinc-800 border-2 border-primary-500/20 text-3xl font-black text-primary-500 shadow-inner">
                   {prestataire.prenom[0]}
                   {prestataire.nom[0]}
                 </div>
                 <div>
-                  <h2 className="text-xl font-bold">
+                  <h2 className="text-3xl font-black text-white uppercase tracking-tight">
                     {prestataire.prenom} {prestataire.nom}
                   </h2>
-                  <p className="text-sm text-gray-500">
+                  <p className="text-sm font-bold text-gray-500 uppercase tracking-widest mt-1">
                     {prestataire.nom_atelier}
                   </p>
                   <span
-                    className={`badge mt-1 border ${config.className} flex w-fit items-center gap-1`}
+                    className={`badge mt-4 border ${config.className} flex w-fit items-center gap-2 px-3 py-1`}
                   >
-                    <StatusIcon className="h-3 w-3" />
+                    <StatusIcon className="h-3.5 w-3.5" />
                     {config.label}
                   </span>
                 </div>
               </div>
             </div>
 
-            <div className="mt-6 grid grid-cols-2 gap-4">
-              <div className="flex items-center gap-3 rounded-lg bg-gray-50 p-3">
-                <Phone className="h-5 w-5 text-gray-400" />
+            <div className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="flex items-center gap-4 rounded-2xl bg-zinc-900 border border-dark-border p-4">
+                <div className="h-10 w-10 flex items-center justify-center rounded-xl bg-zinc-800 text-primary-500/60">
+                    <Phone className="h-5 w-5" />
+                </div>
                 <div>
-                  <p className="text-xs text-gray-500">Téléphone</p>
-                  <p className="text-sm font-medium">
+                  <p className="text-[10px] font-black uppercase tracking-widest text-gray-600">Téléphone</p>
+                  <p className="text-sm font-bold text-white uppercase tracking-tight">
                     {prestataire.telephone}
                   </p>
                 </div>
               </div>
-              <div className="flex items-center gap-3 rounded-lg bg-gray-50 p-3">
-                <Wrench className="h-5 w-5 text-gray-400" />
+              <div className="flex items-center gap-4 rounded-2xl bg-zinc-900 border border-dark-border p-4">
+                <div className="h-10 w-10 flex items-center justify-center rounded-xl bg-zinc-800 text-primary-500/60">
+                    <Wrench className="h-5 w-5" />
+                </div>
                 <div>
-                  <p className="text-xs text-gray-500">Service</p>
-                  <p className="text-sm font-medium">
+                  <p className="text-[10px] font-black uppercase tracking-widest text-gray-600">Service</p>
+                  <p className="text-sm font-bold text-white uppercase tracking-tight">
                     {prestataire.type_service}
                   </p>
                 </div>
               </div>
-              <div className="flex items-center gap-3 rounded-lg bg-gray-50 p-3">
-                <Car className="h-5 w-5 text-gray-400" />
+              <div className="flex items-center gap-4 rounded-2xl bg-zinc-900 border border-dark-border p-4">
+                <div className="h-10 w-10 flex items-center justify-center rounded-xl bg-zinc-800 text-primary-500/60">
+                    <Car className="h-5 w-5" />
+                </div>
                 <div>
-                  <p className="text-xs text-gray-500">Catégorie</p>
-                  <p className="text-sm font-medium">
+                  <p className="text-[10px] font-black uppercase tracking-widest text-gray-600">Catégorie</p>
+                  <p className="text-sm font-bold text-white uppercase tracking-tight">
                     {prestataire.categorie}
                   </p>
                 </div>
               </div>
-              <div className="flex items-center gap-3 rounded-lg bg-gray-50 p-3">
-                <MapPin className="h-5 w-5 text-gray-400" />
+              <div className="flex items-center gap-4 rounded-2xl bg-zinc-900 border border-dark-border p-4">
+                <div className="h-10 w-10 flex items-center justify-center rounded-xl bg-zinc-800 text-primary-500/60">
+                    <MapPin className="h-5 w-5" />
+                </div>
                 <div>
-                  <p className="text-xs text-gray-500">Adresse</p>
-                  <p className="text-sm font-medium">
+                  <p className="text-[10px] font-black uppercase tracking-widest text-gray-600">Adresse</p>
+                  <p className="text-sm font-bold text-white uppercase tracking-tight">
                     {prestataire.adresse || "Non renseigné"}
                   </p>
                 </div>
@@ -246,31 +254,38 @@ export default function DetailPrestatairePage() {
             </div>
 
             {prestataire.latitude && prestataire.longitude && (
-              <div className="mt-4 rounded-lg bg-gray-50 p-3">
-                <p className="text-xs text-gray-500">Coordonnées GPS</p>
-                <p className="text-sm font-medium">
-                  {prestataire.latitude}, {prestataire.longitude}
-                </p>
+              <div className="mt-6 flex items-center gap-3 rounded-2xl bg-primary-500/5 border border-primary-500/10 p-4">
+                <div className="h-8 w-8 flex items-center justify-center rounded-lg bg-primary-500/20 text-primary-500">
+                    <MapPin className="h-4 w-4" />
+                </div>
+                <div>
+                    <p className="text-[10px] font-black uppercase tracking-widest text-primary-500/60">Coordonnées GPS</p>
+                    <p className="text-xs font-mono font-bold text-primary-500/80">
+                      {prestataire.latitude.toFixed(6)}, {prestataire.longitude.toFixed(6)}
+                    </p>
+                </div>
               </div>
             )}
           </div>
 
           <div className="card">
-            <h3 className="section-title mb-4">Documents</h3>
-            <div className="grid grid-cols-2 gap-4">
+            <h3 className="section-title mb-6">Documents Légaux</h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               {[
-                { key: "photo_cip", label: "CIP" },
-                { key: "photo_cnib", label: "CNIB" },
-                { key: "photo_ifu", label: "IFU" },
-                { key: "photo_atelier", label: "Atelier" },
+                { key: "photo_cip", label: "Photo CIP" },
+                { key: "photo_cnib", label: "Photo CNIB" },
+                { key: "photo_ifu", label: "Photo IFU" },
+                { key: "photo_atelier", label: "Photo Atelier" },
               ].map(({ key, label }) => (
                 <div
                   key={key}
-                  className="flex items-center gap-3 rounded-lg border border-gray-200 p-3"
+                  className="flex items-center gap-4 rounded-2xl border border-dark-border bg-zinc-900 p-4 transition-all hover:border-primary-500/20"
                 >
-                  <ImageIcon className="h-5 w-5 text-gray-400" />
-                  <div className="flex-1">
-                    <p className="text-xs text-gray-500">{label}</p>
+                  <div className="h-12 w-12 flex items-center justify-center rounded-xl bg-zinc-800 text-gray-500">
+                    <ImageIcon className="h-6 w-6" />
+                  </div>
+                  <div className="flex-1 overflow-hidden">
+                    <p className="text-[10px] font-black uppercase tracking-widest text-gray-600">{label}</p>
                     {prestataire[key as keyof Prestataire] ? (
                       <a
                         href={
@@ -278,12 +293,12 @@ export default function DetailPrestatairePage() {
                         }
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="text-sm font-medium text-primary-600 hover:underline"
+                        className="text-xs font-bold text-primary-500 hover:underline uppercase tracking-tighter block truncate"
                       >
-                        Voir le document
+                        Visualiser le document
                       </a>
                     ) : (
-                      <p className="text-sm text-gray-400">Non fourni</p>
+                      <p className="text-xs font-bold text-red-500/50 uppercase tracking-tighter">Manquant</p>
                     )}
                   </div>
                 </div>
@@ -292,45 +307,45 @@ export default function DetailPrestatairePage() {
           </div>
         </div>
 
-        <div className="space-y-6">
-          <div className="card">
-            <h3 className="section-title mb-4">Statistiques</h3>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-500">Note moyenne</span>
-                <div className="flex items-center gap-1">
-                  <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
-                  <span className="font-medium">
+        <div className="space-y-8">
+          <div className="card border-l-4 border-l-primary-500">
+            <h3 className="section-title mb-6 text-primary-500">Performances</h3>
+            <div className="space-y-6">
+              <div className="flex items-center justify-between bg-zinc-900 p-4 rounded-2xl border border-dark-border">
+                <span className="text-[10px] font-black uppercase tracking-widest text-gray-500">Note moyenne</span>
+                <div className="flex items-center gap-2">
+                  <Star className="h-5 w-5 fill-amber-500 text-amber-500" />
+                  <span className="text-xl font-black text-white">
                     {prestataire.note_moyenne.toFixed(1)}
                   </span>
                 </div>
               </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-500">Avis reçus</span>
-                <span className="font-medium">
+              <div className="flex items-center justify-between bg-zinc-900 p-4 rounded-2xl border border-dark-border">
+                <span className="text-[10px] font-black uppercase tracking-widest text-gray-500">Avis reçus</span>
+                <span className="text-xl font-black text-white">
                   {prestataire.nombre_avis}
                 </span>
               </div>
-              <div className="flex items-center justify-between">
-                <span className="text-sm text-gray-500">Disponible</span>
+              <div className="flex items-center justify-between bg-zinc-900 p-4 rounded-2xl border border-dark-border">
+                <span className="text-[10px] font-black uppercase tracking-widest text-gray-500">Disponibilité</span>
                 <span
-                  className={`rounded-full px-2 py-0.5 text-xs font-medium ${
+                  className={`badge ${
                     prestataire.est_disponible
-                      ? "bg-emerald-50 text-emerald-700"
-                      : "bg-red-50 text-red-700"
-                  }`}
+                      ? "bg-emerald-500/20 text-emerald-500"
+                      : "bg-red-500/20 text-red-500"
+                  } px-3 py-1`}
                 >
-                  {prestataire.est_disponible ? "Oui" : "Non"}
+                  {prestataire.est_disponible ? "Actif" : "Inactif"}
                 </span>
               </div>
-              <div className="border-t border-gray-100 pt-3">
+              <div className="bg-primary-500/10 p-5 rounded-2xl border border-primary-500/20">
                 <div className="flex items-center justify-between">
-                  <span className="flex items-center gap-1 text-sm text-gray-500">
-                    <Wallet className="h-4 w-4" />
-                    Solde wallet
-                  </span>
-                  <span className="font-bold text-primary-600">
-                    {prestataire.wallet_solde.toLocaleString("fr-FR")} FCFA
+                  <div className="flex items-center gap-2">
+                    <Wallet className="h-5 w-5 text-primary-500" />
+                    <span className="text-[10px] font-black uppercase tracking-widest text-primary-500">Solde Wallet</span>
+                  </div>
+                  <span className="text-2xl font-black text-primary-500">
+                    {prestataire.wallet_solde.toLocaleString("fr-FR")} <span className="text-xs">F</span>
                   </span>
                 </div>
               </div>
@@ -338,22 +353,22 @@ export default function DetailPrestatairePage() {
           </div>
 
           <div className="card">
-            <h3 className="section-title mb-4">Actions</h3>
-            <div className="space-y-2">
+            <h3 className="section-title mb-6">Gestion du compte</h3>
+            <div className="space-y-4">
               {prestataire.statut === "en_attente" && (
                 <>
                   <button
                     onClick={() => handleAction("valider")}
                     disabled={actionLoading}
-                    className="btn-success w-full"
+                    className="btn-success w-full py-4 uppercase font-black tracking-widest text-xs"
                   >
                     <CheckCircle2 className="h-4 w-4" />
-                    Valider le prestataire
+                    Approuver le dossier
                   </button>
                   <button
                     onClick={() => setShowRejetForm(true)}
                     disabled={actionLoading}
-                    className="btn-danger w-full"
+                    className="btn-danger w-full py-4 uppercase font-black tracking-widest text-xs bg-red-500/10 text-red-500 border border-red-500/20 hover:bg-red-500"
                   >
                     <XCircle className="h-4 w-4" />
                     Rejeter
@@ -365,10 +380,10 @@ export default function DetailPrestatairePage() {
                 <button
                   onClick={() => handleAction("suspendre")}
                   disabled={actionLoading}
-                  className="btn-danger w-full"
+                  className="btn-danger w-full py-4 uppercase font-black tracking-widest text-xs"
                 >
                   <PauseCircle className="h-4 w-4" />
-                  Suspendre
+                  Suspendre le compte
                 </button>
               )}
 
@@ -377,29 +392,31 @@ export default function DetailPrestatairePage() {
                 <button
                   onClick={() => handleAction("reactiver")}
                   disabled={actionLoading}
-                  className="btn-success w-full"
+                  className="btn-success w-full py-4 uppercase font-black tracking-widest text-xs"
                 >
                   <PlayCircle className="h-4 w-4" />
-                  Réactiver
+                  Réactiver l&apos;accès
                 </button>
               )}
             </div>
 
             {showRejetForm && prestataire.statut === "en_attente" && (
-              <div className="mt-4 rounded-lg bg-gray-50 p-3">
-                <label className="label">Motif du rejet</label>
-                <textarea
-                  value={motifRejet}
-                  onChange={(e) => setMotifRejet(e.target.value)}
-                  className="input-field min-h-[80px] resize-none"
-                  placeholder="Indiquez le motif du rejet..."
-                />
+              <div className="mt-6 space-y-4 border-t border-zinc-800 pt-6 animate-fade-in">
+                <div className="space-y-2">
+                    <label className="label">Précisez le motif du rejet</label>
+                    <textarea
+                      value={motifRejet}
+                      onChange={(e) => setMotifRejet(e.target.value)}
+                      className="input-field min-h-[100px] resize-none border-red-500/20 focus:border-red-500"
+                      placeholder="Ex: Document illisible, informations incomplètes..."
+                    />
+                </div>
                 <button
                   onClick={() => handleAction("rejeter")}
                   disabled={actionLoading || !motifRejet.trim()}
-                  className="btn-danger mt-2 w-full"
+                  className="btn-danger w-full py-4 uppercase font-black tracking-widest text-xs shadow-lg shadow-red-500/20"
                 >
-                  Confirmer le rejet
+                  Confirmer le rejet définitif
                 </button>
               </div>
             )}

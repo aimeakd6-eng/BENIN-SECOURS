@@ -10,6 +10,8 @@ import {
   XCircle,
   PauseCircle,
   AlertCircle,
+  Wrench,
+  Car
 } from "lucide-react";
 import type { Prestataire } from "@/lib/supabase";
 
@@ -20,22 +22,22 @@ interface PrestataireCardProps {
 const statutConfig = {
   en_attente: {
     label: "En attente",
-    className: "bg-amber-50 text-amber-700 border-amber-200",
+    className: "bg-amber-500/10 text-amber-500 border-amber-500/20",
     icon: Clock,
   },
   validé: {
     label: "Validé",
-    className: "bg-emerald-50 text-emerald-700 border-emerald-200",
+    className: "bg-emerald-500/10 text-emerald-500 border-emerald-500/20",
     icon: CheckCircle2,
   },
   suspendu: {
     label: "Suspendu",
-    className: "bg-red-50 text-red-700 border-red-200",
+    className: "bg-red-500/10 text-red-500 border-red-500/20",
     icon: PauseCircle,
   },
   rejeté: {
     label: "Rejeté",
-    className: "bg-gray-100 text-gray-700 border-gray-200",
+    className: "bg-gray-500/10 text-gray-500 border-gray-500/20",
     icon: XCircle,
   },
 };
@@ -47,101 +49,65 @@ export default function PrestataireCard({ prestataire }: PrestataireCardProps) {
   return (
     <Link
       href={`/prestataires/${prestataire.id}`}
-      className="card group cursor-pointer transition-all hover:border-primary-200 hover:shadow-md"
+      className="card group cursor-pointer transition-all hover:border-primary-500/50 hover:shadow-primary-500/5"
     >
       <div className="flex items-start justify-between">
-        <div className="flex items-center gap-3">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary-50 text-xl font-bold text-primary-600">
+        <div className="flex items-center gap-4">
+          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-zinc-800 border border-zinc-700 text-2xl font-black text-primary-500 shadow-inner">
             {prestataire.prenom[0]}
             {prestataire.nom[0]}
           </div>
           <div>
-            <h3 className="font-semibold text-gray-900 group-hover:text-primary-600">
+            <h3 className="text-lg font-black text-white group-hover:text-primary-500 transition-colors uppercase">
               {prestataire.prenom} {prestataire.nom}
             </h3>
-            <p className="text-sm text-gray-500">{prestataire.nom_atelier}</p>
+            <p className="text-xs font-bold text-gray-500 uppercase tracking-tight">{prestataire.nom_atelier}</p>
           </div>
         </div>
         <span
-          className={`badge border ${config.className} flex items-center gap-1`}
+          className={`badge border ${config.className} flex items-center gap-1.5`}
         >
           <StatusIcon className="h-3 w-3" />
           {config.label}
         </span>
       </div>
 
-      <div className="mt-4 grid grid-cols-2 gap-3">
-        <div className="flex items-center gap-2 text-sm text-gray-600">
-          <WrenchIcon className="h-4 w-4 text-gray-400" />
+      <div className="mt-6 grid grid-cols-2 gap-4">
+        <div className="flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-tight">
+          <Wrench className="h-4 w-4 text-primary-500/60" />
           {prestataire.type_service}
         </div>
-        <div className="flex items-center gap-2 text-sm text-gray-600">
-          <CarIcon className="h-4 w-4 text-gray-400" />
+        <div className="flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-tight">
+          <Car className="h-4 w-4 text-primary-500/60" />
           {prestataire.categorie}
         </div>
-        <div className="flex items-center gap-2 text-sm text-gray-600">
-          <Phone className="h-4 w-4 text-gray-400" />
+        <div className="flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-tight">
+          <Phone className="h-4 w-4 text-primary-500/60" />
           {prestataire.telephone}
         </div>
-        <div className="flex items-center gap-2 text-sm text-gray-600">
-          <MapPin className="h-4 w-4 text-gray-400" />
-          {prestataire.adresse || "Non renseigné"}
+        <div className="flex items-center gap-2 text-xs font-bold text-gray-400 uppercase tracking-tight">
+          <MapPin className="h-4 w-4 text-primary-500/60" />
+          <span className="truncate">{prestataire.adresse || "Non renseigné"}</span>
         </div>
       </div>
 
-      <div className="mt-4 flex items-center justify-between border-t border-gray-100 pt-3">
-        <div className="flex items-center gap-1">
-          <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
-          <span className="text-sm font-medium text-gray-700">
+      <div className="mt-6 flex items-center justify-between border-t border-zinc-800 pt-4">
+        <div className="flex items-center gap-1.5">
+          <Star className="h-4 w-4 fill-amber-500 text-amber-500" />
+          <span className="text-sm font-black text-white">
             {prestataire.note_moyenne.toFixed(1)}
           </span>
-          <span className="text-xs text-gray-400">
+          <span className="text-[10px] font-bold text-gray-600 uppercase">
             ({prestataire.nombre_avis} avis)
           </span>
         </div>
-        <div className="flex items-center gap-1">
-          <AlertCircle className="h-4 w-4 text-gray-400" />
-          <span className="text-sm text-gray-600">
+        <div className="flex items-center gap-1.5 bg-primary-500/5 px-2 py-1 rounded-lg border border-primary-500/10">
+          <AlertCircle className="h-3 w-3 text-primary-500" />
+          <span className="text-xs font-black text-primary-500">
             {prestataire.wallet_solde.toLocaleString("fr-FR")} FCFA
           </span>
         </div>
       </div>
     </Link>
-  );
-}
-
-function WrenchIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-    >
-      <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
-    </svg>
-  );
-}
-
-function CarIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-      className={className}
-    >
-      <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2" />
-      <circle cx="7" cy="17" r="2" />
-      <circle cx="17" cy="17" r="2" />
-    </svg>
   );
 }

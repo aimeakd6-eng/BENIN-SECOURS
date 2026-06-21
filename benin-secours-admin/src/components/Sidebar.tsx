@@ -42,20 +42,20 @@ export default function Sidebar() {
 
   return (
     <aside
-      className={`fixed left-0 top-0 z-40 flex h-screen flex-col border-r border-gray-100 bg-white shadow-xl shadow-gray-200/50 transition-all duration-300 ease-in-out ${
+      className={`fixed left-0 top-0 z-40 flex h-screen flex-col border-r border-dark-border bg-dark-card transition-all duration-300 ease-in-out ${
         collapsed ? "w-20" : "w-72"
       }`}
     >
-      <div className="flex h-20 items-center border-b border-gray-50 px-6">
-        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-600 shadow-lg shadow-primary-200">
-          <Shield className="h-6 w-6 shrink-0 text-white" />
+      <div className="flex h-20 items-center border-b border-dark-border px-6">
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-500 shadow-lg shadow-primary-500/20">
+          <Shield className="h-6 w-6 shrink-0 text-black" />
         </div>
         {!collapsed && (
           <div className="ml-3 overflow-hidden whitespace-nowrap">
-            <span className="block text-lg font-bold tracking-tight text-gray-900">
-              BENIN SECOURS
+            <span className="block text-lg font-black tracking-tight text-white uppercase">
+              BENIN<span className="text-primary-500">-SECOURS</span>
             </span>
-            <span className="block text-[10px] font-bold uppercase tracking-widest text-primary-500">
+            <span className="block text-[10px] font-bold uppercase tracking-widest text-gray-500">
               Admin Portal
             </span>
           </div>
@@ -70,43 +70,40 @@ export default function Sidebar() {
             <Link
               key={item.href}
               href={item.href}
-              className={`group flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold transition-all duration-200 ${
+              className={`group flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold uppercase tracking-widest transition-all duration-200 ${
                 isActive
-                  ? "bg-primary-600 text-white shadow-md shadow-primary-100"
-                  : "text-gray-500 hover:bg-gray-50 hover:text-primary-600"
+                  ? "bg-primary-500 text-black shadow-lg shadow-primary-500/20"
+                  : "text-gray-500 hover:bg-zinc-800 hover:text-white"
               }`}
               title={collapsed ? item.label : undefined}
             >
-              <Icon className={`h-5 w-5 shrink-0 transition-transform duration-200 group-hover:scale-110 ${isActive ? "text-white" : "text-gray-400 group-hover:text-primary-500"}`} />
+              <Icon className={`h-5 w-5 shrink-0 transition-transform duration-200 group-hover:scale-110 ${isActive ? "text-black" : "text-gray-500 group-hover:text-primary-500"}`} />
               {!collapsed && <span>{item.label}</span>}
-              {!collapsed && isActive && (
-                 <div className="ml-auto h-1.5 w-1.5 rounded-full bg-white/50" />
-              )}
             </Link>
           );
         })}
       </nav>
 
-      <div className="border-t border-gray-50 p-4">
+      <div className="border-t border-dark-border p-4">
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="mb-2 flex w-full items-center justify-center rounded-xl bg-gray-50 p-2.5 text-gray-400 transition-all hover:bg-gray-100 hover:text-gray-600"
+          className="mb-2 flex w-full items-center justify-center rounded-xl bg-zinc-900 p-2.5 text-gray-500 transition-all hover:bg-zinc-800 hover:text-white border border-dark-border"
         >
           {collapsed ? (
             <ChevronRight className="h-5 w-5" />
           ) : (
             <div className="flex items-center gap-2">
               <ChevronLeft className="h-5 w-5" />
-              <span className="text-xs font-bold uppercase tracking-wider">Réduire le menu</span>
+              <span className="text-xs font-black uppercase tracking-widest">Réduire</span>
             </div>
           )}
         </button>
         <button
           onClick={handleLogout}
-          className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold text-red-500 transition-all hover:bg-red-50 hover:text-red-600"
+          className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-sm font-bold uppercase tracking-widest text-red-500 transition-all hover:bg-red-500/10"
         >
           <LogOut className="h-5 w-5 shrink-0" />
-          {!collapsed && <span>Déconnexion</span>}
+          {!collapsed && <span>Sortir</span>}
         </button>
       </div>
     </aside>

@@ -10,17 +10,22 @@ const config: Config = {
     extend: {
       colors: {
         primary: {
-          DEFAULT: "#0066CC",
-          50: "#E6F0FA",
-          100: "#CCE0F5",
-          200: "#99C2EB",
-          300: "#66A3E0",
-          400: "#3385D6",
-          500: "#0066CC",
-          600: "#0052A3",
-          700: "#003D7A",
-          800: "#002952",
-          900: "#001429",
+          DEFAULT: "#FFFF00",
+          50: "#FFFFE6",
+          100: "#FFFFCC",
+          200: "#FFFF99",
+          300: "#FFFF66",
+          400: "#FFFF33",
+          500: "#FFFF00",
+          600: "#CCCC00",
+          700: "#999900",
+          800: "#666600",
+          900: "#333300",
+        },
+        dark: {
+          bg: "#0F0F0E",
+          card: "#1C1C1A",
+          border: "#2D2D2A",
         },
         status: {
           en_attente: "#F59E0B",
