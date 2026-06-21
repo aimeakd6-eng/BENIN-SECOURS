@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, MapPin, XCircle, Wrench, Car } from "lucide-react";
+import { ArrowLeft, MapPin, XCircle } from "lucide-react";
 import { getCurrentPosition } from "@/services/location_service";
 import { useDemande } from "@/context/DemandeContext";
 import { TYPES_PANNE } from "@/types";
@@ -46,40 +46,43 @@ export default function SignalerPanneScreen() {
         setLoading(false);
       })
       .catch((err) => {
-        setError(err.message);
+        console.error("GPS Error:", err);
+        setError("Impossible de récupérer la position (Vérifiez le HTTPS)");
+        // On met une position par défaut à Cotonou pour ne pas bloquer les tests
+        setUserLocation({ latitude: 6.365, longitude: 2.418 });
         setLoading(false);
       });
   }, []);
 
   const handleSubmit = () => {
     if (!typePanne) {
-      setError("Veuillez sélectionner un type de panne");
+      alert("Veuillez sélectionner un type de panne");
       return;
     }
     navigate("/depanneurs");
   };
 
   return (
-    <div className="flex h-screen flex-col bg-[#0F0F0E] text-white">
-      <header className="flex items-center justify-between px-6 py-6">
+    <div className="flex h-screen flex-col bg-[#0F0F0E] text-white font-sans">
+      <header className="flex items-center justify-between px-6 py-6 border-b border-white/5">
         <button onClick={() => navigate("/")} className="text-zinc-400">
           <ArrowLeft className="h-6 w-6" />
         </button>
-        <h1 className="text-xl font-black uppercase tracking-tight">Détails Panne</h1>
-        <button onClick={() => navigate("/")} className="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-800 text-zinc-400">
+        <h1 className="text-xl font-black uppercase tracking-widest text-[#FFFF00]">BENIN-SECOURS</h1>
+        <button onClick={() => navigate("/")} className="text-zinc-400">
           <XCircle className="h-6 w-6" />
         </button>
       </header>
 
-      <main className="flex-1 overflow-y-auto px-6">
+      <main className="flex-1 overflow-y-auto px-6 pt-4">
         {loading ? (
             <div className="flex h-40 flex-col items-center justify-center gap-4">
                 <div className="h-10 w-10 animate-spin rounded-full border-4 border-[#FFFF00] border-t-transparent"></div>
-                <p className="text-xs font-bold text-zinc-500 uppercase tracking-widest text-center">Initialisation GPS...</p>
+                <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest text-center">Initialisation GPS...</p>
             </div>
         ) : (
           <>
-            <div className="h-40 w-full overflow-hidden rounded-3xl border border-[#2D2D2A]">
+            <div className="h-40 w-full overflow-hidden rounded-3xl border border-[#2D2D2A] relative">
                <MapContainer
                   center={[userLocation?.latitude || 6.365, userLocation?.longitude || 2.418]}
                   zoom={15}
@@ -89,12 +92,19 @@ export default function SignalerPanneScreen() {
                   <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
                   {userLocation && <Marker position={[userLocation.latitude, userLocation.longitude]} icon={userIcon} />}
                 </MapContainer>
+                {error && (
+                    <div className="absolute bottom-2 left-2 right-2 bg-red-900/80 p-2 rounded-xl text-[8px] font-bold text-white text-center">
+                        MODE TEST : POSITION PAR DÉFAUT (COTONOU)
+                    </div>
+                )}
             </div>
 
             <div className="mt-6">
-                <div className="flex w-fit items-center gap-2 rounded-full bg-[#FFFF00]/10 px-4 py-2 ring-1 ring-[#FFFF00]/20">
-                    <MapPin className="h-4 w-4 text-[#FFFF00]" />
-                    <span className="text-[10px] font-black uppercase tracking-widest text-[#FFFF00]">Position GPS confirmée</span>
+                <div className={`flex w-fit items-center gap-2 rounded-full px-4 py-2 ring-1 ${error ? "bg-red-500/10 ring-red-500/20" : "bg-[#FFFF00]/10 ring-[#FFFF00]/20"}`}>
+                    <MapPin className={`h-4 w-4 ${error ? "text-red-500" : "text-[#FFFF00]"}`} />
+                    <span className={`text-[10px] font-black uppercase tracking-widest ${error ? "text-red-500" : "text-[#FFFF00]"}`}>
+                        {error ? "GPS Désactivé" : "Position GPS confirmée"}
+                    </span>
                 </div>
             </div>
 
@@ -125,7 +135,7 @@ export default function SignalerPanneScreen() {
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Ex: Ma moto s'est arrêtée brusquement..."
                   rows={3}
-                  className="w-full resize-none rounded-2xl border border-zinc-800 bg-[#1C1C1A] px-5 py-4 text-sm font-medium text-white outline-none focus:border-[#FFFF00]"
+                  className="w-full resize-none rounded-2xl border border-zinc-800 bg-[#1C1C1A] px-5 py-4 text-sm font-medium text-white outline-none focus:border-[#FFFF00] !bg-[#1C1C1A] !text-white"
                 />
             </div>
           </>
