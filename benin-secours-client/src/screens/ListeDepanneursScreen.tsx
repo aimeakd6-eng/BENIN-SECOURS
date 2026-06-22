@@ -1,30 +1,31 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowLeft, AlertCircle, List, XCircle, Wrench, Car } from "lucide-react";
+import { ArrowLeft, AlertCircle, List, XCircle, Wrench, Car, MapPin } from "lucide-react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import { getPrestatairesProches } from "@/services/supabase_service";
 import { useDemande } from "@/context/DemandeContext";
 import type { Prestataire } from "@/types";
 import DepanneurCard from "@/components/DepanneurCard";
-import LoadingWidget from "@/components/LoadingWidget";
 
-// Correction icône Leaflet
-import markerIcon from "leaflet/dist/images/marker-icon.png";
-import markerShadow from "leaflet/dist/images/marker-shadow.png";
-
-const defaultIcon = L.icon({
-  iconUrl: markerIcon,
-  shadowUrl: markerShadow,
-  iconSize: [25, 41],
-  iconAnchor: [12, 41],
+// Icône Client (Point Jaune)
+const userIcon = L.divIcon({
+  className: "user-marker",
+  html: `<div style="background-color: #FFFF00; width: 14px; height: 14px; border-radius: 50%; border: 3px solid #0F0F0E; box-shadow: 0 0 15px rgba(255,255,0,0.6);"></div>`,
+  iconSize: [14, 14],
+  iconAnchor: [7, 7],
 });
 
-const userIcon = L.divIcon({
-  className: "user-location-marker",
-  html: `<div style="background-color: #3b82f6; width: 15px; height: 15px; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 10px rgba(0,0,0,0.3);"></div>`,
-  iconSize: [15, 15],
-  iconAnchor: [7, 7],
+// Icône Dépanneur (Clé à molette)
+const artisanIcon = L.divIcon({
+  className: "artisan-marker",
+  html: `<div style="background-color: #1C1C1A; width: 34px; height: 34px; border-radius: 12px; border: 2px solid #FFFF00; display: flex; items-center; justify-content: center; shadow: 0 5px 15px rgba(0,0,0,0.5);">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFFF00" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+            </svg>
+         </div>`,
+  iconSize: [34, 34],
+  iconAnchor: [17, 17],
 });
 
 export default function ListeDepanneursScreen() {
@@ -35,7 +36,6 @@ export default function ListeDepanneursScreen() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [rayon, setRayon] = useState(10);
-  const [searching, setSearching] = useState(false);
 
   useEffect(() => {
     if (!userLocation) {
@@ -46,7 +46,7 @@ export default function ListeDepanneursScreen() {
   }, [userLocation]);
 
   const fetchDepanneurs = async (r: number) => {
-    setSearching(true);
+    setLoading(true);
     setError("");
     const data = await getPrestatairesProches(
       userLocation!.latitude,
@@ -58,90 +58,101 @@ export default function ListeDepanneursScreen() {
     setPrestataires(data);
     setRayon(r);
     setLoading(false);
-    setSearching(false);
     if (data.length === 0) {
-      setError(r >= 30
-        ? "Aucun dépanneur disponible."
-        : `Élargissez votre recherche.`
-      );
+      setError(r >= 30 ? "Aucun dépanneur disponible." : "Élargissez la zone.");
     }
   };
 
   return (
     <div className="flex h-screen flex-col bg-[#0F0F0E]">
-      <header className="flex items-center justify-between px-6 py-6">
-        <button onClick={() => navigate(-1)} className="text-white">
+      <header className="flex items-center justify-between px-6 py-6 text-white border-b border-white/5">
+        <button onClick={() => navigate(-1)} className="text-zinc-400">
           <ArrowLeft className="h-6 w-6" />
         </button>
-        <h1 className="text-xl font-black text-white uppercase tracking-tight">Prestataires Proches</h1>
-        <button onClick={() => navigate("/")} className="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-800 text-zinc-400">
-          <XCircle className="h-6 w-6" />
-        </button>
+        <div className="text-center">
+            <h1 className="text-lg font-black uppercase tracking-tight">Dépanneurs Proches</h1>
+            <p className="text-[9px] font-bold text-[#FFFF00] uppercase tracking-widest">{rayon} KM · {prestataires.length} TROUVÉS</p>
+        </div>
+        <div className="w-6" /> {/* Spacer */}
       </header>
 
-      <main className="flex-1 overflow-y-auto">
-        {/* Map Preview */}
-        <div className="mx-6 h-48 overflow-hidden rounded-3xl border border-[#2D2D2A]">
-           <MapContainer
+      <main className="flex-1 flex flex-col overflow-hidden">
+        {/* Partie CARTE (Haut 40%) */}
+        <div className="h-[40%] w-full border-b border-zinc-800 relative">
+            <MapContainer
               center={[userLocation?.latitude || 6.365, userLocation?.longitude || 2.418]}
-              zoom={13}
+              zoom={14}
               style={{ height: "100%", width: "100%" }}
               zoomControl={false}
             >
-              <TileLayer
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                attribution='&copy; OpenStreetMap'
-              />
+              <TileLayer url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png" />
+
+              {/* Marqueur Utilisateur */}
               {userLocation && (
-                <Marker position={[userLocation.latitude, userLocation.longitude]} icon={userIcon} />
+                <Marker position={[userLocation.latitude, userLocation.longitude]} icon={userIcon}>
+                  <Popup>Vous êtes ici</Popup>
+                </Marker>
               )}
+
+              {/* Marqueurs Prestataires */}
+              {prestataires.map((p) => (
+                p.latitude && p.longitude && (
+                  <Marker
+                    key={p.id}
+                    position={[p.latitude, p.longitude]}
+                    icon={artisanIcon}
+                    eventHandlers={{ click: () => navigate(`/depanneur/${p.id}`) }}
+                  >
+                    <Popup>
+                        <div className="p-2 text-center">
+                            <p className="font-bold text-gray-900">{p.nom_atelier}</p>
+                            <p className="text-[10px] text-gray-500">{p.type_service}</p>
+                        </div>
+                    </Popup>
+                  </Marker>
+                )
+              ))}
             </MapContainer>
-        </div>
 
-        {/* Info Badge */}
-        <div className="mt-6 px-6">
-            <div className="flex w-fit items-center gap-2 rounded-full bg-[#FFFF00]/10 px-4 py-2 ring-1 ring-[#FFFF00]/20">
-                <div className="h-2 w-2 animate-pulse rounded-full bg-[#FFFF00]"></div>
-                <span className="text-xs font-black uppercase tracking-widest text-[#FFFF00]">
-                    {prestataires.length} prestataires en ligne à proximité
-                </span>
-            </div>
-        </div>
-
-        {/* Filters */}
-        <div className="mt-8 flex gap-3 overflow-x-auto px-6 pb-2 no-scrollbar">
-            <button className="flex items-center gap-2 shrink-0 rounded-xl bg-[#FFFF00] px-4 py-3 text-sm font-black text-black uppercase">
-                <List className="h-4 w-4" /> Tous
-            </button>
-            <button className="flex items-center gap-2 shrink-0 rounded-xl bg-zinc-800 px-4 py-3 text-sm font-black text-zinc-400 uppercase">
-                <Wrench className="h-4 w-4" /> Mécanicien
-            </button>
-            <button className="flex items-center gap-2 shrink-0 rounded-xl bg-zinc-800 px-4 py-3 text-sm font-black text-zinc-400 uppercase">
-                <Car className="h-4 w-4" /> Remorqueur
-            </button>
-        </div>
-
-        {/* Results */}
-        <div className="mt-6 space-y-4 px-6 pb-24">
-            {loading ? (
-                <div className="flex h-40 flex-col items-center justify-center gap-4">
-                    <div className="h-10 w-10 animate-spin rounded-full border-4 border-[#FFFF00] border-t-transparent"></div>
-                    <p className="text-xs font-bold text-zinc-500 uppercase tracking-widest">Recherche en cours...</p>
+            {loading && (
+                <div className="absolute inset-0 z-[1001] bg-black/40 flex items-center justify-center">
+                    <div className="h-8 w-8 animate-spin rounded-full border-4 border-[#FFFF00] border-t-transparent"></div>
                 </div>
-            ) : prestataires.length === 0 ? (
-                <div className="rounded-3xl bg-zinc-900/50 p-8 text-center">
-                    <AlertCircle className="mx-auto mb-4 h-12 w-12 text-zinc-600" />
-                    <p className="text-sm font-bold text-zinc-500 uppercase">{error}</p>
-                    {rayon < 30 && (
-                        <button onClick={() => fetchDepanneurs(rayon + 10)} className="mt-4 text-xs font-black text-[#FFFF00] underline uppercase tracking-widest">
-                            Élargir le rayon à {rayon + 10}km
-                        </button>
-                    )}
+            )}
+        </div>
+
+        {/* Partie LISTE (Bas 60%) */}
+        <div className="flex-1 overflow-y-auto px-6 py-6 space-y-4 bg-[#0F0F0E] rounded-t-[32px] -mt-6 z-10 relative shadow-2xl">
+            {/* Petit indicateur de drag pour le style */}
+            <div className="flex justify-center mb-2">
+                <div className="w-12 h-1 rounded-full bg-zinc-800"></div>
+            </div>
+
+            {error && (
+              <div className="rounded-2xl bg-amber-500/10 p-4 border border-amber-500/20 text-center">
+                <p className="text-xs font-bold text-amber-500 uppercase">{error}</p>
+                {rayon < 30 && (
+                    <button onClick={() => fetchDepanneurs(rayon + 10)} className="mt-2 text-[10px] font-black text-[#FFFF00] underline uppercase tracking-widest">
+                        Chercher à {rayon + 10}km
+                    </button>
+                )}
+              </div>
+            )}
+
+            {loading && prestataires.length === 0 ? (
+                <div className="flex flex-col items-center justify-center gap-4 py-10">
+                    <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Recherche des experts...</p>
                 </div>
             ) : (
                 prestataires.map((p) => (
                     <DepanneurCard key={p.id} prestataire={p} onClick={() => navigate(`/depanneur/${p.id}`)} />
                 ))
+            )}
+
+            {prestataires.length === 0 && !loading && !error && (
+                <div className="text-center py-10">
+                    <p className="text-zinc-600 text-sm font-bold uppercase">Aucun résultat dans cette zone</p>
+                </div>
             )}
         </div>
       </main>
